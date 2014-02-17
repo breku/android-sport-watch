@@ -8,6 +8,7 @@ import com.sportwatch.util.ClockHandColor;
 import com.sportwatch.util.ConstantsUtil;
 import com.sportwatch.util.SceneType;
 import org.andengine.entity.IEntity;
+import org.andengine.entity.modifier.ScaleModifier;
 import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.scene.menu.MenuScene;
 import org.andengine.entity.scene.menu.item.IMenuItem;
@@ -16,6 +17,7 @@ import org.andengine.entity.scene.menu.item.decorator.ScaleMenuItemDecorator;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
 import org.andengine.input.touch.TouchEvent;
+import org.andengine.util.debug.Debug;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +33,12 @@ public class OptionsScene extends BaseScene implements MenuScene.IOnMenuItemClic
     private Integer numberOfHandClocks;
     private OptionsService optionsService;
     private boolean removeTexts;
+
+    private final int RECTANGLE_SIZE = 30;
+    private final float RECTANGLE_SCALE = 1.5f;
+    private final float RECTANGLE_SCALE_TIME = 0.5f;
+
+
 
 
     @Override
@@ -58,26 +66,40 @@ public class OptionsScene extends BaseScene implements MenuScene.IOnMenuItemClic
         }
     }
 
-    private void createColorRectangleLine(int height, final int clockNumber) {
+    private void createColorRectangleLine(final int height, final int clockNumber) {
         int positionX = 320;
         for (final ClockHandColor color : ClockHandColor.values()) {
-            Rectangle rectangle = new Rectangle(positionX, height, 30, 30, vertexBufferObjectManager) {
+            Rectangle rectangle = new Rectangle(positionX, height, RECTANGLE_SIZE, RECTANGLE_SIZE, vertexBufferObjectManager) {
                 @Override
                 public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
                     if (pSceneTouchEvent.isActionUp()) {
                         optionsService.setClockHandColor(clockNumber, color.name());
+                        resetPreviousRectangle(height);
+                        registerEntityModifier(new ScaleModifier(RECTANGLE_SCALE_TIME, 1.0f, RECTANGLE_SCALE));
+
                         return true;
                     }
                     return false;
                 }
             };
             rectangle.setColor(color.getColor());
-            rectangle.setTag(clockNumber);
             positionX += 60;
             registerTouchArea(rectangle);
             attachChild(rectangle);
         }
 
+    }
+
+    private void resetPreviousRectangle(int height) {
+        for (IEntity entity : mChildren) {
+            Debug.e(String.valueOf(entity.getWidth()));
+            if (entity instanceof Rectangle && entity.getY() == height) {
+                if (entity.getScaleX() == RECTANGLE_SCALE) {
+                    entity.registerEntityModifier(new ScaleModifier(RECTANGLE_SCALE_TIME, RECTANGLE_SCALE, 1.0f));
+                }
+            }
+
+        }
     }
 
 
