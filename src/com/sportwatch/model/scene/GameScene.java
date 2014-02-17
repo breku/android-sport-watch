@@ -53,11 +53,11 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener {
 
 
     private void createClock() {
-        int angleBetweenHands = 360/numberOfClockHands;
-        for(int i =0;i<numberOfClockHands;i++){
+        int angleBetweenHands = 360 / numberOfClockHands;
+        for (int i = 0; i < numberOfClockHands; i++) {
             Sprite sprite = new Sprite(515, 340, ResourcesManager.getInstance().getClockTextureRegionList().get(i), vertexBufferObjectManager);
             sprite.setRotationCenter(0.46f, 0.04f);
-            sprite.registerEntityModifier(new RotationByModifier(0.1f,angleBetweenHands*i));
+            sprite.registerEntityModifier(new RotationByModifier(0.1f, angleBetweenHands * i));
             sprite.setColor(optionsService.getColorForClockHand(i));
             clockHandList.add(sprite);
         }
@@ -68,12 +68,12 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener {
 
     }
 
-    private void createClockDial(){
-        Sprite sprite = new Sprite(515,255,ResourcesManager.getInstance().getClockDialTextureRegion(),vertexBufferObjectManager);
+    private void createClockDial() {
+        Sprite sprite = new Sprite(515, 255, ResourcesManager.getInstance().getClockDialTextureRegion(), vertexBufferObjectManager);
         attachChild(sprite);
     }
 
-    private void startClocks(){
+    private void startClocks() {
         isClockStarted = true;
         registerUpdateHandler(new TimerHandler(0.5f, true, new ITimerCallback() {
             @Override

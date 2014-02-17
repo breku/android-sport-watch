@@ -10,7 +10,7 @@ public class OptionsService extends BaseService {
 
     private DatabaseHelper databaseHelper = new DatabaseHelper(activity);
 
-    public Integer getNumberOfHandClocks(){
+    public Integer getNumberOfHandClocks() {
         return databaseHelper.getNumberOfHandClocks();
     }
 
@@ -20,7 +20,7 @@ public class OptionsService extends BaseService {
     }
 
     public void setClockHandColor(int clockNumber, String color) {
-        databaseHelper.setClockHandColor(clockNumber,color);
+        databaseHelper.setClockHandColor(clockNumber, color);
     }
 
     public Color getColorForClockHand(int clockHandNumber) {

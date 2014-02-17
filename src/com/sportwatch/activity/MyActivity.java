@@ -106,7 +106,7 @@ public class MyActivity extends BaseGameActivity {
             final FrameLayout.LayoutParams adViewLayoutParams =
                     new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT,
                             FrameLayout.LayoutParams.WRAP_CONTENT,
-                            Gravity.CENTER_HORIZONTAL|Gravity.BOTTOM);
+                            Gravity.CENTER_HORIZONTAL | Gravity.BOTTOM);
 
 
             frameLayout.addView(this.mRenderSurfaceView);

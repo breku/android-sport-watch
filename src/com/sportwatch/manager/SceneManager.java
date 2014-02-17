@@ -39,7 +39,7 @@ public class SceneManager {
         onCreateSceneCallback.onCreateSceneFinished(splashScene);
     }
 
-    private void setAdVisible(){
+    private void setAdVisible() {
         ResourcesManager.getInstance().getActivity().runOnUiThread(
                 new Runnable() {
                     @Override

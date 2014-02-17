@@ -53,19 +53,19 @@ public class OptionsScene extends BaseScene implements MenuScene.IOnMenuItemClic
         for (int i = 0; i < numberOfHandClocks; i++) {
             int height = 460 - 60 * (i + 1);
             Text text = new Text(150, height, ResourcesManager.getInstance().getWhiteFont(), "Clock hand " + (i + 1) + " color", vertexBufferObjectManager);
-            createColorRectangleLine(height,i);
+            createColorRectangleLine(height, i);
             attachChild(text);
         }
     }
 
-    private void createColorRectangleLine(int height, final int clockNumber){
+    private void createColorRectangleLine(int height, final int clockNumber) {
         int positionX = 320;
-        for(final ClockHandColor color: ClockHandColor.values()){
-            Rectangle rectangle = new Rectangle(positionX,height,30,30,vertexBufferObjectManager){
+        for (final ClockHandColor color : ClockHandColor.values()) {
+            Rectangle rectangle = new Rectangle(positionX, height, 30, 30, vertexBufferObjectManager) {
                 @Override
                 public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
-                    if(pSceneTouchEvent.isActionUp()){
-                        optionsService.setClockHandColor(clockNumber,color.name());
+                    if (pSceneTouchEvent.isActionUp()) {
+                        optionsService.setClockHandColor(clockNumber, color.name());
                         return true;
                     }
                     return false;
@@ -73,7 +73,7 @@ public class OptionsScene extends BaseScene implements MenuScene.IOnMenuItemClic
             };
             rectangle.setColor(color.getColor());
             rectangle.setTag(clockNumber);
-            positionX+=60;
+            positionX += 60;
             registerTouchArea(rectangle);
             attachChild(rectangle);
         }
@@ -127,7 +127,7 @@ public class OptionsScene extends BaseScene implements MenuScene.IOnMenuItemClic
         }
     }
 
-    private void removeTexts(){
+    private void removeTexts() {
         removeTexts = false;
         IEntity entity;
         do {
@@ -138,7 +138,7 @@ public class OptionsScene extends BaseScene implements MenuScene.IOnMenuItemClic
         } while (entity != null);
     }
 
-    private void removeColorRectangles(){
+    private void removeColorRectangles() {
         IEntity entity;
         do {
             entity = getChildByMatcher(new ClassIEntityMatcher(Rectangle.class));
@@ -171,7 +171,7 @@ public class OptionsScene extends BaseScene implements MenuScene.IOnMenuItemClic
     }
 
     private void updateNumberOfHandClocks(int handClockNumber) {
-        optionsService.updateNumberOfHandClocks(handClockNumber+1);
+        optionsService.updateNumberOfHandClocks(handClockNumber + 1);
         numberOfHandClocks = optionsService.getNumberOfHandClocks();
         removeTexts = true;
     }

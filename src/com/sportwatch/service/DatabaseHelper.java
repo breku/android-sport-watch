@@ -102,15 +102,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private void createDefaultHighScoreValues(SQLiteDatabase sqLiteDatabase) {
 
 
-        createDefaultNumberOfClockHands(sqLiteDatabase,ConstantsUtil.MAX_NUMBER_OF_CLOCK_HANDS);
+        createDefaultNumberOfClockHands(sqLiteDatabase, ConstantsUtil.MAX_NUMBER_OF_CLOCK_HANDS);
 
         // Create default colors for each clock hand
         for (int i = 0; i < ConstantsUtil.MAX_NUMBER_OF_CLOCK_HANDS; i++) {
-            createDefaultHighScoreRecord(sqLiteDatabase,i,ClockHandColor.WHITE);
+            createDefaultHighScoreRecord(sqLiteDatabase, i, ClockHandColor.WHITE);
         }
     }
 
-    private void createDefaultNumberOfClockHands(SQLiteDatabase sqLiteDatabase,Integer numberOfHandClocks){
+    private void createDefaultNumberOfClockHands(SQLiteDatabase sqLiteDatabase, Integer numberOfHandClocks) {
         ContentValues contentValues = new ContentValues();
 
         contentValues.put(COLUMN_NUMBER_OF_HAND_CLOCKS, numberOfHandClocks);
@@ -132,7 +132,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public Integer getNumberOfHandClocks() {
         Integer result = null;
         SQLiteDatabase database = getReadableDatabase();
-        Cursor cursor = database.rawQuery("SELECT " + COLUMN_NUMBER_OF_HAND_CLOCKS+ " FROM " + MAIN_OPTIONS_TABLE, new String[]{});
+        Cursor cursor = database.rawQuery("SELECT " + COLUMN_NUMBER_OF_HAND_CLOCKS + " FROM " + MAIN_OPTIONS_TABLE, new String[]{});
         while (cursor.moveToNext()) {
             result = cursor.getInt(0);
         }
@@ -149,7 +149,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public void setClockHandColor(int clockNumber, String color) {
         SQLiteDatabase database = getWritableDatabase();
-        database.execSQL("UPDATE " + HAND_CLOCK_OPTIONS_TABLE + " SET " + COLUMN_CLOCK_HAND_COLOR + " = ?  WHERE " + COLUMN_CLOCK_HAND_NUMBER + " = ?", new Object[]{color,clockNumber});
+        database.execSQL("UPDATE " + HAND_CLOCK_OPTIONS_TABLE + " SET " + COLUMN_CLOCK_HAND_COLOR + " = ?  WHERE " + COLUMN_CLOCK_HAND_NUMBER + " = ?", new Object[]{color, clockNumber});
         database.close();
     }
 
@@ -163,8 +163,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cursor.close();
         database.close();
         for (ClockHandColor color : ClockHandColor.values()) {
-            Debug.e(result + " "  + color.name());
-            if(result.toString().equals(color.name())){
+            Debug.e(result + " " + color.name());
+            if (result.toString().equals(color.name())) {
                 return color.getColor();
             }
 
