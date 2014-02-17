@@ -1,6 +1,7 @@
 package com.sportwatch.manager;
 
 import android.graphics.Color;
+import com.sportwatch.service.OptionsService;
 import com.sportwatch.util.ConstantsUtil;
 import org.andengine.audio.sound.Sound;
 import org.andengine.audio.sound.SoundFactory;
@@ -35,14 +36,15 @@ public class ResourcesManager {
     private Engine engine;
     private Camera camera;
     private VertexBufferObjectManager vertexBufferObjectManager;
+    private OptionsService optionsService;
 
     private BitmapTextureAtlas splashTextureAtlas, menuFontTextureAtlas, gameFontTextureAtlas, greenFontTextureAtlas,
             chalkFontTextureAtlas, loadingTextureAtlas;
     private BuildableBitmapTextureAtlas menuTextureAtlas, optionsTextureAtlas, aboutTextureAtlas, endGameTextureAtlas,
-            recordTextureAtlas, gameTypeTextureAtlas, gameTextureAtlas;
+            recordTextureAtlas, gameTypeTextureAtlas, gameBackgroundTextureAtlas, gameTextureAtlas;
 
     // Game
-    private ITextureRegion backgroundGameTextureRegion;
+    private ITextureRegion backgroundGameTextureRegion, clockDialTextureRegion;
     private List<ITextureRegion> clockTextureRegionList;
 
 
@@ -237,21 +239,26 @@ public class ResourcesManager {
 
         if (gameTextureAtlas != null) {
             gameTextureAtlas.load();
+            gameBackgroundTextureAtlas.load();
         }
 
         BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/game/");
         gameTextureAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+        gameBackgroundTextureAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 
         clockTextureRegionList = new ArrayList<ITextureRegion>();
-        for (int i = 0; i < ConstantsUtil.NUMBER_OF_CLOCK_HANDS; i++) {
+        for (int i = 0; i < ConstantsUtil.MAX_NUMBER_OF_CLOCK_HANDS; i++) {
             clockTextureRegionList.add(BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "clock.png"));
         }
+        clockDialTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "clockDial.png");
 
-        backgroundGameTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "background.png");
+        backgroundGameTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameBackgroundTextureAtlas, activity, "background.png");
 
         try {
             gameTextureAtlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(5, 5, 5));
+            gameBackgroundTextureAtlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(5, 5, 5));
             gameTextureAtlas.load();
+            gameBackgroundTextureAtlas.load();
         } catch (ITextureAtlasBuilder.TextureAtlasBuilderException e) {
             e.printStackTrace();
         }
@@ -367,6 +374,7 @@ public class ResourcesManager {
 
     public void unloadGameTextures() {
         gameTextureAtlas.unload();
+        gameBackgroundTextureAtlas.unload();
     }
 
     public void unloadMenuTextures() {
@@ -517,4 +525,7 @@ public class ResourcesManager {
         loadingTextureAtlas.load();
     }
 
+    public ITextureRegion getClockDialTextureRegion() {
+        return clockDialTextureRegion;
+    }
 }

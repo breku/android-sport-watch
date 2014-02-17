@@ -27,28 +27,6 @@ public class SceneManager {
 
     public void setScene(BaseScene scene) {
 
-        if (scene instanceof GameScene || scene instanceof HighScoreScene
-                || scene instanceof AboutScene) {
-            ResourcesManager.getInstance().getActivity().runOnUiThread(
-                    new Runnable() {
-                        @Override
-                        public void run() {
-                            ((MyActivity) ResourcesManager.getInstance().getActivity()).getAdView().setVisibility(AdView.INVISIBLE);
-                        }
-                    }
-            );
-        } else {
-            ResourcesManager.getInstance().getActivity().runOnUiThread(
-                    new Runnable() {
-                        @Override
-                        public void run() {
-                            ((MyActivity) ResourcesManager.getInstance().getActivity()).getAdView().setVisibility(AdView.VISIBLE);
-                        }
-                    }
-            );
-
-        }
-
         ResourcesManager.getInstance().getEngine().setScene(scene);
         currentScene = scene;
         currentSceneType = scene.getSceneType();
@@ -61,11 +39,22 @@ public class SceneManager {
         onCreateSceneCallback.onCreateSceneFinished(splashScene);
     }
 
+    private void setAdVisible(){
+        ResourcesManager.getInstance().getActivity().runOnUiThread(
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        ((MyActivity) ResourcesManager.getInstance().getActivity()).getAdView().setVisibility(AdView.VISIBLE);
+                    }
+                }
+        );
+    }
 
     public void createMainMenuScene() {
         ResourcesManager.getInstance().loadMainMenuResources();
         ResourcesManager.getInstance().loadGameTypeResources();
         ResourcesManager.getInstance().loadLoadingResources();
+        setAdVisible();
         menuScene = new MainMenuScene();
         loadingScene = new LoadingScene();
         setScene(menuScene);

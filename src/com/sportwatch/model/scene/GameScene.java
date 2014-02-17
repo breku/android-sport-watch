@@ -3,6 +3,7 @@ package com.sportwatch.model.scene;
 import com.sportwatch.manager.ResourcesManager;
 import com.sportwatch.manager.SceneManager;
 import com.sportwatch.matcher.ClassTouchAreaMacher;
+import com.sportwatch.service.OptionsService;
 import com.sportwatch.util.ConstantsUtil;
 import com.sportwatch.util.SceneType;
 import org.andengine.engine.camera.hud.HUD;
@@ -28,6 +29,8 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener {
     private Integer firstTimeCounter;
     private List<Sprite> clockHandList;
     private boolean isClockStarted;
+    private int numberOfClockHands;
+    private OptionsService optionsService;
 
 
     /**
@@ -44,16 +47,17 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener {
         init(objects);
         createBackground();
         createHUD();
+        createClockDial();
         createClock();
     }
 
 
     private void createClock() {
-        int angleBetweenHands = 360/ConstantsUtil.NUMBER_OF_CLOCK_HANDS;
-        for(int i =0;i<ConstantsUtil.NUMBER_OF_CLOCK_HANDS;i++){
-            Sprite sprite = new Sprite(515, 240, ResourcesManager.getInstance().getClockTextureRegionList().get(i), vertexBufferObjectManager);
-            sprite.setRotationCenter(0.04f, 0.46f);
-            sprite.registerEntityModifier(new RotationByModifier(1,angleBetweenHands*i));
+        int angleBetweenHands = 360/numberOfClockHands;
+        for(int i =0;i<numberOfClockHands;i++){
+            Sprite sprite = new Sprite(515, 340, ResourcesManager.getInstance().getClockTextureRegionList().get(i), vertexBufferObjectManager);
+            sprite.setRotationCenter(0.46f, 0.04f);
+            sprite.registerEntityModifier(new RotationByModifier(0.1f,angleBetweenHands*i));
             clockHandList.add(sprite);
         }
 
@@ -62,6 +66,12 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener {
         }
 
     }
+
+    private void createClockDial(){
+        Sprite sprite = new Sprite(515,255,ResourcesManager.getInstance().getClockDialTextureRegion(),vertexBufferObjectManager);
+        attachChild(sprite);
+    }
+
     private void startClocks(){
         isClockStarted = true;
         registerUpdateHandler(new TimerHandler(0.5f, true, new ITimerCallback() {
@@ -82,11 +92,15 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener {
     private void init(Object... objects) {
         clearUpdateHandlers();
         clearTouchAreas();
-
         setOnSceneTouchListener(this);
+
+        optionsService = new OptionsService();
+
         firstTimeCounter = 0;
         clockHandList = new ArrayList<Sprite>();
         isClockStarted = false;
+
+        numberOfClockHands = optionsService.getNumberOfHandClocks();
 
     }
 
