@@ -6,6 +6,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import com.sportwatch.util.ClockHandColor;
+import com.sportwatch.util.ConstantsUtil;
+import org.andengine.util.adt.color.Color;
+import org.andengine.util.debug.Debug;
 
 /**
  * User: Breku
@@ -35,7 +38,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String COLUMN_CLOCK_HAND_NUMBER = "CLOCK_HAND_NUMBER";
 
     private static final String COLUMN_CLOCK_HAND_COLOR = "COLUMN_CLOCK_HAND_COLOR";
-    private static final int DATABASE_VERSION = 5;
+    private static final int DATABASE_VERSION = 8;
 
 
     public DatabaseHelper(Context context) {
@@ -99,12 +102,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private void createDefaultHighScoreValues(SQLiteDatabase sqLiteDatabase) {
 
 
-        createDefaultNumberOfClockHands(sqLiteDatabase,6);
+        createDefaultNumberOfClockHands(sqLiteDatabase,ConstantsUtil.MAX_NUMBER_OF_CLOCK_HANDS);
 
         // Create default colors for each clock hand
-        int clockHandNumber = 0;
-        for (ClockHandColor clockHandColor : ClockHandColor.values()) {
-            createDefaultHighScoreRecord(sqLiteDatabase,clockHandNumber++,clockHandColor);
+        for (int i = 0; i < ConstantsUtil.MAX_NUMBER_OF_CLOCK_HANDS; i++) {
+            createDefaultHighScoreRecord(sqLiteDatabase,i,ClockHandColor.WHITE);
         }
     }
 
@@ -143,5 +145,30 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase database = getWritableDatabase();
         database.execSQL("UPDATE " + MAIN_OPTIONS_TABLE + " SET " + COLUMN_NUMBER_OF_HAND_CLOCKS + " = ? ", new Object[]{numberOfHandClocks});
         database.close();
+    }
+
+    public void setClockHandColor(int clockNumber, String color) {
+        SQLiteDatabase database = getWritableDatabase();
+        database.execSQL("UPDATE " + HAND_CLOCK_OPTIONS_TABLE + " SET " + COLUMN_CLOCK_HAND_COLOR + " = ?  WHERE " + COLUMN_CLOCK_HAND_NUMBER + " = ?", new Object[]{color,clockNumber});
+        database.close();
+    }
+
+    public Color getColorForClockHand(Integer clockHandNumber) {
+        String result = null;
+        SQLiteDatabase database = getReadableDatabase();
+        Cursor cursor = database.rawQuery("SELECT " + COLUMN_CLOCK_HAND_COLOR + " FROM " + HAND_CLOCK_OPTIONS_TABLE + " WHERE " + COLUMN_CLOCK_HAND_NUMBER + " = ?", new String[]{clockHandNumber.toString()});
+        while (cursor.moveToNext()) {
+            result = cursor.getString(0);
+        }
+        cursor.close();
+        database.close();
+        for (ClockHandColor color : ClockHandColor.values()) {
+            Debug.e(result + " "  + color.name());
+            if(result.toString().equals(color.name())){
+                return color.getColor();
+            }
+
+        }
+        throw new UnsupportedOperationException("Color does not exists. Retrieved color from db: " + result.toString());
     }
 }

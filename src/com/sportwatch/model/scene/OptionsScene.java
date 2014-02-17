@@ -4,15 +4,18 @@ import com.sportwatch.manager.ResourcesManager;
 import com.sportwatch.manager.SceneManager;
 import com.sportwatch.matcher.ClassIEntityMatcher;
 import com.sportwatch.service.OptionsService;
+import com.sportwatch.util.ClockHandColor;
 import com.sportwatch.util.ConstantsUtil;
 import com.sportwatch.util.SceneType;
 import org.andengine.entity.IEntity;
+import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.scene.menu.MenuScene;
 import org.andengine.entity.scene.menu.item.IMenuItem;
 import org.andengine.entity.scene.menu.item.TextMenuItem;
 import org.andengine.entity.scene.menu.item.decorator.ScaleMenuItemDecorator;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
+import org.andengine.input.touch.TouchEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +37,7 @@ public class OptionsScene extends BaseScene implements MenuScene.IOnMenuItemClic
     public void createScene(Object... objects) {
         init();
         createBackground();
-        createTexts();
+        createTextsAndColorRectangles();
     }
 
     private void init() {
@@ -44,13 +47,37 @@ public class OptionsScene extends BaseScene implements MenuScene.IOnMenuItemClic
 
 
     /**
-     * Creates middle-left captions
+     * Creates middle captions + rectangles
      */
-    private void createTexts() {
+    private void createTextsAndColorRectangles() {
         for (int i = 0; i < numberOfHandClocks; i++) {
-            Text text = new Text(250, 420 - 60 * (i + 1), ResourcesManager.getInstance().getWhiteFont(), "Clock hand " + (i + 1) + " color", vertexBufferObjectManager);
+            int height = 460 - 60 * (i + 1);
+            Text text = new Text(150, height, ResourcesManager.getInstance().getWhiteFont(), "Clock hand " + (i + 1) + " color", vertexBufferObjectManager);
+            createColorRectangleLine(height,i);
             attachChild(text);
         }
+    }
+
+    private void createColorRectangleLine(int height, final int clockNumber){
+        int positionX = 320;
+        for(final ClockHandColor color: ClockHandColor.values()){
+            Rectangle rectangle = new Rectangle(positionX,height,30,30,vertexBufferObjectManager){
+                @Override
+                public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
+                    if(pSceneTouchEvent.isActionUp()){
+                        optionsService.setClockHandColor(clockNumber,color.name());
+                        return true;
+                    }
+                    return false;
+                }
+            };
+            rectangle.setColor(color.getColor());
+            rectangle.setTag(clockNumber);
+            positionX+=60;
+            registerTouchArea(rectangle);
+            attachChild(rectangle);
+        }
+
     }
 
 
@@ -77,7 +104,7 @@ public class OptionsScene extends BaseScene implements MenuScene.IOnMenuItemClic
         menuScene.setBackgroundEnabled(false);
 
         for (int i = 0; i < menuItemList.size(); i++) {
-            menuItemList.get(i).setPosition(120 * (i + 1), 400);
+            menuItemList.get(i).setPosition(120 * (i + 1), 440);
         }
 
         menuScene.setOnMenuItemClickListener(this);
@@ -94,7 +121,9 @@ public class OptionsScene extends BaseScene implements MenuScene.IOnMenuItemClic
 
         if (removeTexts) {
             removeTexts();
-            createTexts();
+            removeColorRectangles();
+            clearTouchAreas();
+            createTextsAndColorRectangles();
         }
     }
 
@@ -103,6 +132,16 @@ public class OptionsScene extends BaseScene implements MenuScene.IOnMenuItemClic
         IEntity entity;
         do {
             entity = getChildByMatcher(new ClassIEntityMatcher(Text.class));
+            if (entity != null) {
+                entity.detachSelf();
+            }
+        } while (entity != null);
+    }
+
+    private void removeColorRectangles(){
+        IEntity entity;
+        do {
+            entity = getChildByMatcher(new ClassIEntityMatcher(Rectangle.class));
             if (entity != null) {
                 entity.detachSelf();
             }

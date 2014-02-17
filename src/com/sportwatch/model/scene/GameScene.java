@@ -58,6 +58,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener {
             Sprite sprite = new Sprite(515, 340, ResourcesManager.getInstance().getClockTextureRegionList().get(i), vertexBufferObjectManager);
             sprite.setRotationCenter(0.46f, 0.04f);
             sprite.registerEntityModifier(new RotationByModifier(0.1f,angleBetweenHands*i));
+            sprite.setColor(optionsService.getColorForClockHand(i));
             clockHandList.add(sprite);
         }
 

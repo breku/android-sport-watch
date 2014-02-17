@@ -12,7 +12,8 @@ public enum ClockHandColor {
     BLUE(Color.BLUE),
     BLACK(Color.BLACK),
     PINK(Color.PINK),
-    YELLOW(Color.YELLOW);
+    YELLOW(Color.YELLOW),
+    WHITE(Color.WHITE);
 
     private Color color;
 
