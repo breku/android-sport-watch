@@ -242,15 +242,15 @@ public class GameScene extends BaseScene {
         stopWatchTimeList.add(new Float(0));
         stopWatchTimeList.add(new Float(0));
 
-        stopWatchTextList.add(new Text(80, 350, ResourcesManager.getInstance().getWhiteFontBiggest(), "0", vertexBufferObjectManager));
-        stopWatchTextList.add(new Text(120, 350, ResourcesManager.getInstance().getWhiteFontBiggest(), "0", vertexBufferObjectManager));
-        stopWatchTextList.add(new Text(200, 350, ResourcesManager.getInstance().getWhiteFontBiggest(), "0", vertexBufferObjectManager));
-        stopWatchTextList.add(new Text(240, 350, ResourcesManager.getInstance().getWhiteFontBiggest(), "0", vertexBufferObjectManager));
+        stopWatchTextList.add(new Text(80, 300, ResourcesManager.getInstance().getWhiteFontBiggest(), "0", vertexBufferObjectManager));
+        stopWatchTextList.add(new Text(120, 300, ResourcesManager.getInstance().getWhiteFontBiggest(), "0", vertexBufferObjectManager));
+        stopWatchTextList.add(new Text(200, 300, ResourcesManager.getInstance().getWhiteFontBiggest(), "0", vertexBufferObjectManager));
+        stopWatchTextList.add(new Text(240, 300, ResourcesManager.getInstance().getWhiteFontBiggest(), "0", vertexBufferObjectManager));
 
 
         Color color = optionsService.getClockDialColor();
 
-        Text colon = new Text(140, 240, ResourcesManager.getInstance().getWhiteFontBig(), ":", vertexBufferObjectManager);
+        Text colon = new Text(140, 300, ResourcesManager.getInstance().getWhiteFontBiggest(), ":", vertexBufferObjectManager);
         colon.setColor(color);
         attachChild(colon);
 
