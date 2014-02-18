@@ -15,7 +15,7 @@ public class LoadingScene extends BaseScene {
     @Override
     public void createScene(Object... objects) {
         createBackground();
-        attachChild(new Text(ConstantsUtil.SCREEN_WIDTH / 2, ConstantsUtil.SCREEN_HEIGHT / 2, ResourcesManager.getInstance().getChalkFont(),
+        attachChild(new Text(ConstantsUtil.SCREEN_WIDTH / 2, ConstantsUtil.SCREEN_HEIGHT / 2, ResourcesManager.getInstance().getWhiteFont(),
                 "loading...", vertexBufferObjectManager));
     }
 

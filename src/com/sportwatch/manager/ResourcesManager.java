@@ -1,7 +1,6 @@
 package com.sportwatch.manager;
 
 import android.graphics.Color;
-import com.sportwatch.service.OptionsService;
 import com.sportwatch.util.ConstantsUtil;
 import org.andengine.audio.sound.Sound;
 import org.andengine.audio.sound.SoundFactory;
@@ -36,15 +35,15 @@ public class ResourcesManager {
     private Engine engine;
     private Camera camera;
     private VertexBufferObjectManager vertexBufferObjectManager;
-    private OptionsService optionsService;
 
     private BitmapTextureAtlas splashTextureAtlas, menuFontTextureAtlas, gameFontTextureAtlas, whiteFontBigTextureAtlas,
-            chalkFontTextureAtlas, loadingTextureAtlas;
+            whiteFontBiggestTextureAtlas, loadingTextureAtlas;
     private BuildableBitmapTextureAtlas menuTextureAtlas, optionsTextureAtlas, aboutTextureAtlas, endGameTextureAtlas,
             recordTextureAtlas, gameTypeTextureAtlas, gameBackgroundTextureAtlas, gameTextureAtlas;
 
     // Game
-    private ITextureRegion backgroundGameTextureRegion, clockDialTextureRegion;
+    private ITextureRegion backgroundGameTextureRegion, clockDialTextureRegion,
+            buttonPauseTextureRegion, buttonStartTextureRegion, buttonResetTextureRegion;
     private List<ITextureRegion> clockTextureRegionList;
 
 
@@ -77,7 +76,7 @@ public class ResourcesManager {
 
     private List<Sound> winSoundList, loseSoundList, halfWinSoundList;
     private Sound startGameSound;
-    private Font whiteFont, blackFont, whiteFontBig, chalkFont;
+    private Font whiteFont, blackFont, whiteFontBig, whiteFontBiggest;
 
     public static void prepareManager(Engine engine, BaseGameActivity activity, Camera camera, VertexBufferObjectManager vertexBufferObjectManager) {
         getInstance().engine = engine;
@@ -99,7 +98,7 @@ public class ResourcesManager {
         loadWhiteFont();
         loadBlackFont();
         loadWhiteFontBig();
-        loadChalkFont();
+        loadWhiteFontBiggest();
     }
 
     public void loadGameResources() {
@@ -251,6 +250,10 @@ public class ResourcesManager {
             clockTextureRegionList.add(BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "clock.png"));
         }
         clockDialTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "clockDial.png");
+        buttonResetTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "reset.png");
+        buttonStartTextureRegion= BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "start.png");
+        buttonPauseTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "pause.png");
+
 
         backgroundGameTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameBackgroundTextureAtlas, activity, "background.png");
 
@@ -302,15 +305,15 @@ public class ResourcesManager {
         menuTextureAtlas.load();
     }
 
-    private void loadChalkFont() {
-        if (chalkFontTextureAtlas != null) {
+    private void loadWhiteFontBiggest() {
+        if (whiteFontBiggestTextureAtlas != null) {
             return;
         }
         FontFactory.setAssetBasePath("font/");
-        chalkFontTextureAtlas = new BitmapTextureAtlas(activity.getTextureManager(), 512, 512, TextureOptions.BILINEAR);
-        chalkFont = FontFactory.createStrokeFromAsset(activity.getFontManager(), chalkFontTextureAtlas, activity.getAssets(), "ChalkPaint.ttf", 50, true, Color.WHITE, 2, Color.WHITE);
-        chalkFontTextureAtlas.load();
-        chalkFont.load();
+        whiteFontBiggestTextureAtlas = new BitmapTextureAtlas(activity.getTextureManager(), 512, 512, TextureOptions.BILINEAR);
+        whiteFontBiggest = FontFactory.createStrokeFromAsset(activity.getFontManager(), whiteFontBiggestTextureAtlas, activity.getAssets(), "ChalkPaint.ttf", 100, true, Color.WHITE, 2, Color.WHITE);
+        whiteFontBiggestTextureAtlas.load();
+        whiteFontBiggest.load();
     }
 
     private void loadWhiteFontBig() {
@@ -454,8 +457,8 @@ public class ResourcesManager {
         return whiteFontBig;
     }
 
-    public Font getChalkFont() {
-        return chalkFont;
+    public Font getWhiteFontBiggest() {
+        return whiteFontBiggest;
     }
 
     public ITextureRegion getEndGameBackgroundTextureRegion() {
@@ -527,5 +530,17 @@ public class ResourcesManager {
 
     public ITextureRegion getClockDialTextureRegion() {
         return clockDialTextureRegion;
+    }
+
+    public ITextureRegion getButtonPauseTextureRegion() {
+        return buttonPauseTextureRegion;
+    }
+
+    public ITextureRegion getButtonStartTextureRegion() {
+        return buttonStartTextureRegion;
+    }
+
+    public ITextureRegion getButtonResetTextureRegion() {
+        return buttonResetTextureRegion;
     }
 }

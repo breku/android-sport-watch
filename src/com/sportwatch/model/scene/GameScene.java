@@ -7,11 +7,10 @@ import com.sportwatch.service.OptionsService;
 import com.sportwatch.util.ConstantsUtil;
 import com.sportwatch.util.SceneType;
 import org.andengine.engine.camera.hud.HUD;
+import org.andengine.engine.handler.IUpdateHandler;
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.entity.modifier.RotationByModifier;
-import org.andengine.entity.scene.IOnSceneTouchListener;
-import org.andengine.entity.scene.Scene;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
 import org.andengine.input.touch.TouchEvent;
@@ -24,7 +23,7 @@ import java.util.List;
  * User: Breku
  * Date: 21.09.13
  */
-public class GameScene extends BaseScene implements IOnSceneTouchListener {
+public class GameScene extends BaseScene {
 
     private HUD gameHUD;
 
@@ -35,7 +34,9 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener {
     private OptionsService optionsService;
 
     private List<Text> stopWatchTextList;
+    private List<Float> stopWatchTimeList;
 
+    private Sprite buttonPause, buttonStart, buttonReset;
 
     /**
      * @param objects objects[0] - levelDifficulty
@@ -54,6 +55,82 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener {
         createStopWatch();
         createClockDial();
         createClock();
+        createButtons();
+    }
+
+    private void createButtons() {
+         buttonPause = new Sprite(200,180,ResourcesManager.getInstance().getButtonPauseTextureRegion(),vertexBufferObjectManager){
+            @Override
+            public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
+                if(pSceneTouchEvent.isActionUp()){
+                    resetClocks();
+                    unregisterTouchArea(this);
+                    setVisible(false);
+                    pauseClocks();
+
+                    buttonStart.setVisible(true);
+                    registerTouchArea(buttonStart);
+
+                    return true;
+                }
+                return false;
+            }
+        };
+
+
+        buttonStart = new Sprite(200,180,ResourcesManager.getInstance().getButtonStartTextureRegion(),vertexBufferObjectManager){
+            @Override
+            public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
+                if(pSceneTouchEvent.isActionUp()){
+                    startClocks();
+                    unregisterTouchArea(this);
+                    setVisible(false);
+
+                    buttonPause.setVisible(true);
+                    registerTouchArea(buttonPause);
+                    return true;
+                }
+                return false;
+            }
+        };
+
+
+
+        buttonReset = new Sprite(100,180,ResourcesManager.getInstance().getButtonResetTextureRegion(),vertexBufferObjectManager){
+            @Override
+            public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
+                if(pSceneTouchEvent.isActionUp()){
+                    resetClocks();
+                    return true;
+                }
+                return false;
+            }
+        };
+
+        registerTouchArea(buttonStart);
+
+        buttonPause.setVisible(false);
+
+        attachChild(buttonPause);
+        attachChild(buttonReset);
+        attachChild(buttonStart);
+    }
+
+    private void pauseClocks() {
+        isClockStarted = false;
+        unregisterUpdateHandlers(new IUpdateHandlerMatcher() {
+            @Override
+            public boolean matches(IUpdateHandler pItem) {
+                if(pItem instanceof TimerHandler){
+                    return true;
+                }
+                return false;
+            }
+        });
+    }
+
+    private void resetClocks() {
+
     }
 
 
@@ -82,41 +159,41 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener {
 
     private void startClocks() {
         isClockStarted = true;
-        registerUpdateHandler(new TimerHandler(0.5f, true, new ITimerCallback() {
+        registerUpdateHandler(new TimerHandler(0.25f, true, new ITimerCallback() {
             @Override
             public void onTimePassed(TimerHandler pTimerHandler) {
                 for (Sprite clockHand : clockHandList) {
-                    clockHand.registerEntityModifier(new RotationByModifier(0.5f, 3.0f));
+                    clockHand.registerEntityModifier(new RotationByModifier(0.25f, 1.5f));
                 }
             }
         }));
 
-        registerUpdateHandler(new TimerHandler(1.0f, true, new ITimerCallback() {
+        registerUpdateHandler(new TimerHandler(0.25f, true, new ITimerCallback() {
             @Override
             public void onTimePassed(final TimerHandler pTimerHandler) {
-                addOneSecond();
+                addSeconds(0.25f);
             }
         }));
 
     }
 
-    private void addOneSecond() {
+    private void addSeconds(Float seconds) {
 
-        if (Integer.valueOf(stopWatchTextList.get(3).getText().toString()) == 9) {
+        if (stopWatchTimeList.get(3) > 9.7f) {
             resetStopWatchForPosition(3);
-            addOneForPosition(2);
+            addForPosition(2,Float.valueOf(1));
         }else {
-            addOneForPosition(3);
+            addForPosition(3,seconds);
         }
-        if (Integer.valueOf(stopWatchTextList.get(2).getText().toString()) == 6) {
+        if (stopWatchTimeList.get(2) > 5.7f) {
             resetStopWatchForPosition(2);
-            addOneForPosition(1);
+            addForPosition(1,Float.valueOf(1));
         }
-        if (Integer.valueOf(stopWatchTextList.get(1).getText().toString()) == 9) {
+        if (stopWatchTimeList.get(1) > 9.7f) {
             resetStopWatchForPosition(1);
-            addOneForPosition(0);
+            addForPosition(0,Float.valueOf(1));
         }
-        if (Integer.valueOf(stopWatchTextList.get(0).getText().toString()) == 6) {
+        if (stopWatchTimeList.get(0) > 5.7f) {
             resetStopWatchForPosition(0);
             resetStopWatchForPosition(1);
             resetStopWatchForPosition(2);
@@ -125,14 +202,15 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener {
 
     }
 
-    private void addOneForPosition(Integer position) {
-        String text = stopWatchTextList.get(position).getText().toString();
-        Integer result = Integer.valueOf(text) + 1;
-        stopWatchTextList.get(position).setText(result.toString());
+    private void addForPosition(Integer position, Float seconds) {
+        float newValue = stopWatchTimeList.get(position) + seconds;
+        stopWatchTimeList.set(position,newValue);
+        stopWatchTextList.get(position).setText(String.valueOf((int) newValue));
     }
 
     private void resetStopWatchForPosition(Integer position) {
         stopWatchTextList.get(position).setText("0");
+        stopWatchTimeList.set(position,Float.valueOf(0));
     }
 
 
@@ -144,7 +222,6 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener {
     private void init(Object... objects) {
         clearUpdateHandlers();
         clearTouchAreas();
-        setOnSceneTouchListener(this);
 
         optionsService = new OptionsService();
 
@@ -159,15 +236,25 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener {
     private void createStopWatch() {
         stopWatchTextList = new ArrayList<Text>();
 
-        stopWatchTextList.add(new Text(100, 240, ResourcesManager.getInstance().getWhiteFontBig(), "0", vertexBufferObjectManager));
-        stopWatchTextList.add(new Text(120, 240, ResourcesManager.getInstance().getWhiteFontBig(), "0", vertexBufferObjectManager));
-        stopWatchTextList.add(new Text(160, 240, ResourcesManager.getInstance().getWhiteFontBig(), "0", vertexBufferObjectManager));
-        stopWatchTextList.add(new Text(180, 240, ResourcesManager.getInstance().getWhiteFontBig(), "0", vertexBufferObjectManager));
+        stopWatchTimeList = new ArrayList<Float>();
+        stopWatchTimeList.add(new Float(0));
+        stopWatchTimeList.add(new Float(0));
+        stopWatchTimeList.add(new Float(0));
+        stopWatchTimeList.add(new Float(0));
 
-        Text colon = new Text(140, 240, ResourcesManager.getInstance().getWhiteFontBig(), ":", vertexBufferObjectManager);
-        attachChild(colon);
+        stopWatchTextList.add(new Text(80, 350, ResourcesManager.getInstance().getWhiteFontBiggest(), "0", vertexBufferObjectManager));
+        stopWatchTextList.add(new Text(120, 350, ResourcesManager.getInstance().getWhiteFontBiggest(), "0", vertexBufferObjectManager));
+        stopWatchTextList.add(new Text(200, 350, ResourcesManager.getInstance().getWhiteFontBiggest(), "0", vertexBufferObjectManager));
+        stopWatchTextList.add(new Text(240, 350, ResourcesManager.getInstance().getWhiteFontBiggest(), "0", vertexBufferObjectManager));
+
 
         Color color = optionsService.getClockDialColor();
+
+        Text colon = new Text(140, 240, ResourcesManager.getInstance().getWhiteFontBig(), ":", vertexBufferObjectManager);
+        colon.setColor(color);
+        attachChild(colon);
+
+
 
         for (Text text : stopWatchTextList) {
             text.setColor(color);
@@ -222,13 +309,5 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener {
         camera.setCenter(ConstantsUtil.SCREEN_WIDTH / 2, ConstantsUtil.SCREEN_HEIGHT / 2);
         camera.setChaseEntity(null);
         engine.disableAccelerationSensor(activity);
-    }
-
-    @Override
-    public boolean onSceneTouchEvent(Scene pScene, TouchEvent pSceneTouchEvent) {
-        if (pSceneTouchEvent.isActionUp() && !isClockStarted) {
-            startClocks();
-        }
-        return false;
     }
 }
