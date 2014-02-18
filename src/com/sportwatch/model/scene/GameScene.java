@@ -13,6 +13,7 @@ import org.andengine.entity.modifier.RotationByModifier;
 import org.andengine.entity.scene.IOnSceneTouchListener;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.sprite.Sprite;
+import org.andengine.entity.text.Text;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.util.adt.color.Color;
 
@@ -33,6 +34,8 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener {
     private int numberOfClockHands;
     private OptionsService optionsService;
 
+    private List<Text> stopWatchTextList;
+
 
     /**
      * @param objects objects[0] - levelDifficulty
@@ -48,6 +51,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener {
         init(objects);
         createBackground();
         createHUD();
+        createStopWatch();
         createClockDial();
         createClock();
     }
@@ -86,7 +90,51 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener {
                 }
             }
         }));
+
+        registerUpdateHandler(new TimerHandler(1.0f, true, new ITimerCallback() {
+            @Override
+            public void onTimePassed(final TimerHandler pTimerHandler) {
+                addOneSecond();
+            }
+        }));
+
     }
+
+    private void addOneSecond() {
+
+        if (Integer.valueOf(stopWatchTextList.get(3).getText().toString()) == 9) {
+            resetStopWatchForPosition(3);
+            addOneForPosition(2);
+        }else {
+            addOneForPosition(3);
+        }
+        if (Integer.valueOf(stopWatchTextList.get(2).getText().toString()) == 6) {
+            resetStopWatchForPosition(2);
+            addOneForPosition(1);
+        }
+        if (Integer.valueOf(stopWatchTextList.get(1).getText().toString()) == 9) {
+            resetStopWatchForPosition(1);
+            addOneForPosition(0);
+        }
+        if (Integer.valueOf(stopWatchTextList.get(0).getText().toString()) == 6) {
+            resetStopWatchForPosition(0);
+            resetStopWatchForPosition(1);
+            resetStopWatchForPosition(2);
+            resetStopWatchForPosition(3);
+        }
+
+    }
+
+    private void addOneForPosition(Integer position) {
+        String text = stopWatchTextList.get(position).getText().toString();
+        Integer result = Integer.valueOf(text) + 1;
+        stopWatchTextList.get(position).setText(result.toString());
+    }
+
+    private void resetStopWatchForPosition(Integer position) {
+        stopWatchTextList.get(position).setText("0");
+    }
+
 
     @Override
     public void onBackKeyPressed() {
@@ -106,6 +154,25 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener {
 
         numberOfClockHands = optionsService.getNumberOfHandClocks();
 
+    }
+
+    private void createStopWatch() {
+        stopWatchTextList = new ArrayList<Text>();
+
+        stopWatchTextList.add(new Text(100, 240, ResourcesManager.getInstance().getWhiteFontBig(), "0", vertexBufferObjectManager));
+        stopWatchTextList.add(new Text(120, 240, ResourcesManager.getInstance().getWhiteFontBig(), "0", vertexBufferObjectManager));
+        stopWatchTextList.add(new Text(160, 240, ResourcesManager.getInstance().getWhiteFontBig(), "0", vertexBufferObjectManager));
+        stopWatchTextList.add(new Text(180, 240, ResourcesManager.getInstance().getWhiteFontBig(), "0", vertexBufferObjectManager));
+
+        Text colon = new Text(140, 240, ResourcesManager.getInstance().getWhiteFontBig(), ":", vertexBufferObjectManager);
+        attachChild(colon);
+
+        Color color = optionsService.getClockDialColor();
+
+        for (Text text : stopWatchTextList) {
+            text.setColor(color);
+            attachChild(text);
+        }
     }
 
 
