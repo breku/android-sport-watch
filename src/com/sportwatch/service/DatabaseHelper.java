@@ -171,4 +171,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         throw new UnsupportedOperationException("Color does not exists. Retrieved color from db: " + result.toString());
     }
+
+    public boolean isClockHandColored(Integer clockNumber, ClockHandColor color) {
+        String result = null;
+        SQLiteDatabase database = getReadableDatabase();
+        Cursor cursor = database.rawQuery("SELECT " + COLUMN_CLOCK_HAND_COLOR + " FROM " + HAND_CLOCK_OPTIONS_TABLE + " WHERE " + COLUMN_CLOCK_HAND_NUMBER + " = ?", new String[]{clockNumber.toString()});
+        while (cursor.moveToNext()) {
+            result = cursor.getString(0);
+        }
+        cursor.close();
+        database.close();
+        return result.equals(color.name());
+    }
 }

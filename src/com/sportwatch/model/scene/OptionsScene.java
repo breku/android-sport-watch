@@ -36,7 +36,7 @@ public class OptionsScene extends BaseScene implements MenuScene.IOnMenuItemClic
 
     private final int RECTANGLE_SIZE = 30;
     private final float RECTANGLE_SCALE = 1.5f;
-    private final float RECTANGLE_SCALE_TIME = 0.5f;
+    private final float RECTANGLE_SCALE_TIME = 0.25f;
 
 
 
@@ -82,6 +82,9 @@ public class OptionsScene extends BaseScene implements MenuScene.IOnMenuItemClic
                     return false;
                 }
             };
+            if(optionsService.isClockHandColored(clockNumber,color)){
+                rectangle.setScale(RECTANGLE_SCALE);
+            }
             rectangle.setColor(color.getColor());
             positionX += 60;
             registerTouchArea(rectangle);
@@ -115,7 +118,8 @@ public class OptionsScene extends BaseScene implements MenuScene.IOnMenuItemClic
 
         List<IMenuItem> menuItemList = new ArrayList<IMenuItem>();
         for (int i = 0; i < ConstantsUtil.MAX_NUMBER_OF_CLOCK_HANDS; i++) {
-            menuItemList.add(new ScaleMenuItemDecorator(new TextMenuItem(i, ResourcesManager.getInstance().getWhiteFont(), String.valueOf(i + 1), vertexBufferObjectManager), 1.2f, 1));
+            TextMenuItem textMenuItem = new TextMenuItem(i, ResourcesManager.getInstance().getWhiteFontBig(), String.valueOf(i + 1), vertexBufferObjectManager);
+            menuItemList.add(new ScaleMenuItemDecorator(textMenuItem, 1.2f, 1));
         }
 
         for (IMenuItem menuItem : menuItemList) {

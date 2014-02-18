@@ -38,7 +38,7 @@ public class ResourcesManager {
     private VertexBufferObjectManager vertexBufferObjectManager;
     private OptionsService optionsService;
 
-    private BitmapTextureAtlas splashTextureAtlas, menuFontTextureAtlas, gameFontTextureAtlas, greenFontTextureAtlas,
+    private BitmapTextureAtlas splashTextureAtlas, menuFontTextureAtlas, gameFontTextureAtlas, whiteFontBigTextureAtlas,
             chalkFontTextureAtlas, loadingTextureAtlas;
     private BuildableBitmapTextureAtlas menuTextureAtlas, optionsTextureAtlas, aboutTextureAtlas, endGameTextureAtlas,
             recordTextureAtlas, gameTypeTextureAtlas, gameBackgroundTextureAtlas, gameTextureAtlas;
@@ -77,7 +77,7 @@ public class ResourcesManager {
 
     private List<Sound> winSoundList, loseSoundList, halfWinSoundList;
     private Sound startGameSound;
-    private Font whiteFont, blackFont, greenFont, chalkFont;
+    private Font whiteFont, blackFont, whiteFontBig, chalkFont;
 
     public static void prepareManager(Engine engine, BaseGameActivity activity, Camera camera, VertexBufferObjectManager vertexBufferObjectManager) {
         getInstance().engine = engine;
@@ -98,7 +98,7 @@ public class ResourcesManager {
         loadMainMenuGraphics();
         loadWhiteFont();
         loadBlackFont();
-        loadGreenFont();
+        loadWhiteFontBig();
         loadChalkFont();
     }
 
@@ -313,15 +313,15 @@ public class ResourcesManager {
         chalkFont.load();
     }
 
-    private void loadGreenFont() {
-        if (greenFontTextureAtlas != null) {
+    private void loadWhiteFontBig() {
+        if (whiteFontBigTextureAtlas != null) {
             return;
         }
         FontFactory.setAssetBasePath("font/");
-        greenFontTextureAtlas = new BitmapTextureAtlas(activity.getTextureManager(), 512, 512, TextureOptions.BILINEAR);
-        greenFont = FontFactory.createStrokeFromAsset(activity.getFontManager(), greenFontTextureAtlas, activity.getAssets(), "ChalkPaint.ttf", 50, true, Color.GREEN, 2, Color.GREEN);
-        greenFontTextureAtlas.load();
-        greenFont.load();
+        whiteFontBigTextureAtlas = new BitmapTextureAtlas(activity.getTextureManager(), 512, 512, TextureOptions.BILINEAR);
+        whiteFontBig = FontFactory.createStrokeFromAsset(activity.getFontManager(), whiteFontBigTextureAtlas, activity.getAssets(), "ChalkPaint.ttf", 50, true, Color.WHITE, 2, Color.WHITE);
+        whiteFontBigTextureAtlas.load();
+        whiteFontBig.load();
     }
 
     private void loadBlackFont() {
@@ -450,8 +450,8 @@ public class ResourcesManager {
         return blackFont;
     }
 
-    public Font getGreenFont() {
-        return greenFont;
+    public Font getWhiteFontBig() {
+        return whiteFontBig;
     }
 
     public Font getChalkFont() {

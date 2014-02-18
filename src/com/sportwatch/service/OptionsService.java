@@ -1,5 +1,6 @@
 package com.sportwatch.service;
 
+import com.sportwatch.util.ClockHandColor;
 import org.andengine.util.adt.color.Color;
 
 /**
@@ -25,5 +26,9 @@ public class OptionsService extends BaseService {
 
     public Color getColorForClockHand(int clockHandNumber) {
         return databaseHelper.getColorForClockHand(clockHandNumber);
+    }
+
+    public boolean isClockHandColored(int clockNumber, ClockHandColor color) {
+        return databaseHelper.isClockHandColored(clockNumber,color);
     }
 }
