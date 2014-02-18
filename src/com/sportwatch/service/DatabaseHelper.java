@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import com.sportwatch.model.scene.OptionsScene;
 import com.sportwatch.util.ClockHandColor;
 import com.sportwatch.util.ConstantsUtil;
 import org.andengine.util.adt.color.Color;
@@ -38,7 +39,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String COLUMN_CLOCK_HAND_NUMBER = "CLOCK_HAND_NUMBER";
 
     private static final String COLUMN_CLOCK_HAND_COLOR = "COLUMN_CLOCK_HAND_COLOR";
-    private static final int DATABASE_VERSION = 8;
+    private static final int DATABASE_VERSION = 10;
 
 
     public DatabaseHelper(Context context) {
@@ -103,11 +104,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
         createDefaultNumberOfClockHands(sqLiteDatabase, ConstantsUtil.MAX_NUMBER_OF_CLOCK_HANDS);
+        createDefaulColorOfClockDial(sqLiteDatabase,ClockHandColor.WHITE);
 
         // Create default colors for each clock hand
         for (int i = 0; i < ConstantsUtil.MAX_NUMBER_OF_CLOCK_HANDS; i++) {
             createDefaultHighScoreRecord(sqLiteDatabase, i, ClockHandColor.WHITE);
         }
+    }
+
+    private void createDefaulColorOfClockDial(SQLiteDatabase sqLiteDatabase, ClockHandColor color) {
+        ContentValues contentValues = new ContentValues();
+
+        contentValues.put(COLUMN_CLOCK_HAND_NUMBER, OptionsScene.CLOCK_DIAL_NUMER);
+        contentValues.put(COLUMN_CLOCK_HAND_COLOR, color.name());
+
+        sqLiteDatabase.insert(HAND_CLOCK_OPTIONS_TABLE, null, contentValues);
     }
 
     private void createDefaultNumberOfClockHands(SQLiteDatabase sqLiteDatabase, Integer numberOfHandClocks) {

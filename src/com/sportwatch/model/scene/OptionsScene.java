@@ -38,6 +38,8 @@ public class OptionsScene extends BaseScene implements MenuScene.IOnMenuItemClic
     private final float RECTANGLE_SCALE = 1.5f;
     private final float RECTANGLE_SCALE_TIME = 0.25f;
 
+    public static final int CLOCK_DIAL_NUMER = 100;
+
 
 
 
@@ -45,7 +47,10 @@ public class OptionsScene extends BaseScene implements MenuScene.IOnMenuItemClic
     public void createScene(Object... objects) {
         init();
         createBackground();
+        createTopLeftCaption();
+        createTopNumbers();
         createTextsAndColorRectangles();
+        createTextAndRectangleForClockDial();
     }
 
     private void init() {
@@ -59,21 +64,38 @@ public class OptionsScene extends BaseScene implements MenuScene.IOnMenuItemClic
      */
     private void createTextsAndColorRectangles() {
         for (int i = 0; i < numberOfHandClocks; i++) {
-            int height = 460 - 60 * (i + 1);
+            int height = 400 - 60 * (i + 1);
             Text text = new Text(150, height, ResourcesManager.getInstance().getWhiteFont(), "Clock hand " + (i + 1) + " color", vertexBufferObjectManager);
             createColorRectangleLine(height, i);
             attachChild(text);
         }
     }
 
+    private void createTextAndRectangleForClockDial(){
+        Text text = new Text(150, 400, ResourcesManager.getInstance().getWhiteFont(), "Color of clock dial", vertexBufferObjectManager);
+        attachChild(text);
+        createColorRectangleLine(400,CLOCK_DIAL_NUMER);
+
+    }
+
     private void createColorRectangleLine(final int height, final int clockNumber) {
+
+
+
         int positionX = 320;
         for (final ClockHandColor color : ClockHandColor.values()) {
             Rectangle rectangle = new Rectangle(positionX, height, RECTANGLE_SIZE, RECTANGLE_SIZE, vertexBufferObjectManager) {
                 @Override
                 public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
                     if (pSceneTouchEvent.isActionUp()) {
-                        optionsService.setClockHandColor(clockNumber, color.name());
+
+                        if(clockNumber == CLOCK_DIAL_NUMER){
+                            optionsService.setClockDialColor(clockNumber, color.name());
+                        }else {
+                            optionsService.setClockHandColor(clockNumber, color.name());
+                        }
+
+
                         resetPreviousRectangle(height);
                         registerEntityModifier(new ScaleModifier(RECTANGLE_SCALE_TIME, 1.0f, RECTANGLE_SCALE));
 
@@ -105,13 +127,10 @@ public class OptionsScene extends BaseScene implements MenuScene.IOnMenuItemClic
         }
     }
 
-
     /**
      * Creates top numbers
      */
-    private void createBackground() {
-        attachChild(new Sprite(ConstantsUtil.SCREEN_WIDTH / 2, ConstantsUtil.SCREEN_HEIGHT / 2, resourcesManager.getOptionsBackgroundTextureRegion(), vertexBufferObjectManager));
-
+    private void createTopNumbers(){
         menuScene = new MenuScene(camera);
         menuScene.setPosition(0, 0);
 
@@ -130,13 +149,21 @@ public class OptionsScene extends BaseScene implements MenuScene.IOnMenuItemClic
         menuScene.setBackgroundEnabled(false);
 
         for (int i = 0; i < menuItemList.size(); i++) {
-            menuItemList.get(i).setPosition(120 * (i + 1), 440);
+            menuItemList.get(i).setPosition(300 + 80 * (i + 1), 440);
         }
 
         menuScene.setOnMenuItemClickListener(this);
 
         setChildScene(menuScene);
+    }
 
+    private void createBackground() {
+        attachChild(new Sprite(ConstantsUtil.SCREEN_WIDTH / 2, ConstantsUtil.SCREEN_HEIGHT / 2, resourcesManager.getOptionsBackgroundTextureRegion(), vertexBufferObjectManager));
+    }
+
+    private void createTopLeftCaption(){
+        Text text = new Text(200,440,ResourcesManager.getInstance().getWhiteFont(),"Number of clock hands",vertexBufferObjectManager);
+        attachChild(text);
     }
 
 
@@ -149,10 +176,18 @@ public class OptionsScene extends BaseScene implements MenuScene.IOnMenuItemClic
             removeTexts();
             removeColorRectangles();
             clearTouchAreas();
+            createTextAndRectangleForClockDial();
             createTextsAndColorRectangles();
+            createTopLeftCaption();
+
         }
     }
 
+    /**
+     * Removes:
+     * topLeftText next to Numbers
+     * middleTexts next to rectangles, the first for dial included
+     */
     private void removeTexts() {
         removeTexts = false;
         IEntity entity;

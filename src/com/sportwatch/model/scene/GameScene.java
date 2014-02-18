@@ -14,6 +14,7 @@ import org.andengine.entity.scene.IOnSceneTouchListener;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.input.touch.TouchEvent;
+import org.andengine.util.adt.color.Color;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -70,6 +71,8 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener {
 
     private void createClockDial() {
         Sprite sprite = new Sprite(515, 255, ResourcesManager.getInstance().getClockDialTextureRegion(), vertexBufferObjectManager);
+        Color color = optionsService.getClockDialColor();
+        sprite.setColor(color);
         attachChild(sprite);
     }
 
