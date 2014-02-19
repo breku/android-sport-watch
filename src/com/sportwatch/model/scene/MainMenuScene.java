@@ -18,9 +18,6 @@ public class MainMenuScene extends BaseScene implements MenuScene.IOnMenuItemCli
     private MenuScene menuScene;
     private final int NEW_GAME = 0;
     private final int OPTIONS = 1;
-    private final int ABOUT = 2;
-    private final int EXIT = 3;
-    private final int RECORDS = 4;
 
 
     @Override
@@ -41,26 +38,16 @@ public class MainMenuScene extends BaseScene implements MenuScene.IOnMenuItemCli
         menuScene.setPosition(0, 0);
 
         final IMenuItem newGameItem = new ScaleMenuItemDecorator(new SpriteMenuItem(NEW_GAME, ResourcesManager.getInstance().getButtonNewGameTextureRegion(), vertexBufferObjectManager), 1.2f, 1);
-        final IMenuItem aboutItem = new ScaleMenuItemDecorator(new SpriteMenuItem(ABOUT, ResourcesManager.getInstance().getButtonAboutTextureRegion(), vertexBufferObjectManager), 1.2f, 1);
         final IMenuItem optionsItem = new ScaleMenuItemDecorator(new SpriteMenuItem(OPTIONS, ResourcesManager.getInstance().getButtonOptionsTextureRegion(), vertexBufferObjectManager), 1.2f, 1);
-        final IMenuItem exitItem = new ScaleMenuItemDecorator(new SpriteMenuItem(EXIT, ResourcesManager.getInstance().getButtonExitTextureRegion(), vertexBufferObjectManager), 1.2f, 1);
-//        final IMenuItem recordsItem = new ScaleMenuItemDecorator(new SpriteMenuItem(RECORDS, ResourcesManager.getInstance().getButtonHighScoreTextureRegion(), vertexBufferObjectManager), 1.2f, 1);
 
         menuScene.addMenuItem(newGameItem);
         menuScene.addMenuItem(optionsItem);
-        menuScene.addMenuItem(aboutItem);
-        menuScene.addMenuItem(exitItem);
-//        menuScene.addMenuItem(recordsItem);
 
         menuScene.buildAnimations();
         menuScene.setBackgroundEnabled(false);
 
         newGameItem.setPosition(210, 397);
-//        recordsItem.setPosition(210, 327);
         optionsItem.setPosition(210, 327);
-        //(ConstantsUtil.SCREEN_WIDTH * 2 / 3, ConstantsUtil.SCREEN_HEIGHT * 3 / 4);
-        aboutItem.setPosition(210, 257);
-        exitItem.setPosition(210, 187);
 
         menuScene.setOnMenuItemClickListener(this);
 
@@ -91,14 +78,6 @@ public class MainMenuScene extends BaseScene implements MenuScene.IOnMenuItemCli
                 break;
             case OPTIONS:
                 SceneManager.getInstance().loadOptionsScene();
-                break;
-            case ABOUT:
-                SceneManager.getInstance().loadAboutScene();
-                break;
-            case EXIT:
-                System.exit(0);
-            case RECORDS:
-                SceneManager.getInstance().loadHighScoreSceneFrom(SceneType.MENU, null);
                 break;
             default:
                 return false;

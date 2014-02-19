@@ -52,7 +52,6 @@ public class SceneManager {
 
     public void createMainMenuScene() {
         ResourcesManager.getInstance().loadMainMenuResources();
-        ResourcesManager.getInstance().loadGameTypeResources();
         ResourcesManager.getInstance().loadLoadingResources();
         setAdVisible();
         menuScene = new MainMenuScene();
@@ -65,10 +64,6 @@ public class SceneManager {
     public void loadMenuSceneFrom(SceneType sceneType) {
         setScene(loadingScene);
         switch (sceneType) {
-            case ABOUT:
-                aboutScene.disposeScene();
-                ResourcesManager.getInstance().unloadAboutTextures();
-                break;
             case GAME:
                 gameScene.disposeScene();
                 ResourcesManager.getInstance().unloadGameTextures();
@@ -77,21 +72,12 @@ public class SceneManager {
                 ResourcesManager.getInstance().unloadOptionsTextures();
                 optionsScene.disposeScene();
                 break;
-            case ENDGAME:
-                ResourcesManager.getInstance().unloadEndGameTextures();
-                endGameScene.disposeScene();
-                break;
-            case RECORDS:
-                ResourcesManager.getInstance().unloadRecordsTextures();
-                recordScene.disposeScene();
-                break;
         }
         ResourcesManager.getInstance().getEngine().registerUpdateHandler(new TimerHandler(ConstantsUtil.LOADING_SCENE_TIME, new ITimerCallback() {
             @Override
             public void onTimePassed(TimerHandler pTimerHandler) {
                 ResourcesManager.getInstance().getEngine().unregisterUpdateHandler(pTimerHandler);
                 ResourcesManager.getInstance().loadMenuTextures();
-                ResourcesManager.getInstance().loadGameTypeResources();
                 setScene(menuScene);
             }
         }));
@@ -99,7 +85,6 @@ public class SceneManager {
 
     public void loadGameScene() {
         setScene(loadingScene);
-        ResourcesManager.getInstance().unloadGameTypeTextures();
         ResourcesManager.getInstance().getEngine().registerUpdateHandler(new TimerHandler(ConstantsUtil.LOADING_SCENE_TIME, new ITimerCallback() {
             @Override
             public void onTimePassed(TimerHandler pTimerHandler) {
@@ -109,67 +94,6 @@ public class SceneManager {
                 setScene(gameScene);
             }
         }));
-    }
-
-    public void loadAboutScene() {
-        setScene(loadingScene);
-        ResourcesManager.getInstance().unloadMenuTextures();
-        ResourcesManager.getInstance().getEngine().registerUpdateHandler(new TimerHandler(ConstantsUtil.LOADING_SCENE_TIME / 2, new ITimerCallback() {
-            @Override
-            public void onTimePassed(TimerHandler pTimerHandler) {
-                ResourcesManager.getInstance().getEngine().unregisterUpdateHandler(pTimerHandler);
-                ResourcesManager.getInstance().loadAboutResources();
-                aboutScene = new AboutScene();
-                setScene(aboutScene);
-            }
-        }));
-    }
-
-    public void loadHighScoreSceneFrom(SceneType sceneType, final Integer score) {
-        switch (sceneType) {
-            case MENU:
-                setScene(loadingScene);
-                ResourcesManager.getInstance().unloadMenuTextures();
-                ResourcesManager.getInstance().getEngine().registerUpdateHandler(new TimerHandler(ConstantsUtil.LOADING_SCENE_TIME / 2, new ITimerCallback() {
-                    @Override
-                    public void onTimePassed(TimerHandler pTimerHandler) {
-                        ResourcesManager.getInstance().getEngine().unregisterUpdateHandler(pTimerHandler);
-                        ResourcesManager.getInstance().loadRecordResources();
-                        recordScene = new HighScoreScene();
-                        setScene(recordScene);
-                    }
-                }));
-                break;
-            case GAME:
-                setScene(loadingScene);
-                gameScene.disposeScene();
-                ResourcesManager.getInstance().unloadGameTextures();
-                ResourcesManager.getInstance().getEngine().registerUpdateHandler(new TimerHandler(ConstantsUtil.LOADING_SCENE_TIME / 4, new ITimerCallback() {
-                    @Override
-                    public void onTimePassed(TimerHandler pTimerHandler) {
-                        ResourcesManager.getInstance().getEngine().unregisterUpdateHandler(pTimerHandler);
-                        ResourcesManager.getInstance().loadRecordResources();
-                        recordScene = new HighScoreScene(score);
-                        setScene(recordScene);
-                    }
-                }));
-                break;
-            case ENDGAME:
-                ResourcesManager.getInstance().loadRecordResources();
-                recordScene = new HighScoreScene();
-                setScene(recordScene);
-                break;
-            default:
-                throw new UnsupportedOperationException();
-        }
-
-    }
-
-    public void loadEndGameScene(Integer score) {
-        endGameScene = new EndGameScene(score);
-        setScene(endGameScene);
-        gameScene.disposeScene();
-        ResourcesManager.getInstance().unloadGameTextures();
     }
 
     public void loadOptionsScene() {
