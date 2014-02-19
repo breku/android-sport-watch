@@ -293,10 +293,10 @@ public class GameScene extends BaseScene {
         stopWatchTimeList.add(new Float(0));
         stopWatchTimeList.add(new Float(0));
 
-        stopWatchTextList.add(new Text(80, 300, ResourcesManager.getInstance().getWhiteFontBiggest(), "0", vertexBufferObjectManager));
-        stopWatchTextList.add(new Text(120, 300, ResourcesManager.getInstance().getWhiteFontBiggest(), "0", vertexBufferObjectManager));
-        stopWatchTextList.add(new Text(200, 300, ResourcesManager.getInstance().getWhiteFontBiggest(), "0", vertexBufferObjectManager));
-        stopWatchTextList.add(new Text(240, 300, ResourcesManager.getInstance().getWhiteFontBiggest(), "0", vertexBufferObjectManager));
+        stopWatchTextList.add(new Text(80, 300, ResourcesManager.getInstance().getWhiteFontBiggest(), "00", vertexBufferObjectManager));
+        stopWatchTextList.add(new Text(120, 300, ResourcesManager.getInstance().getWhiteFontBiggest(), "00", vertexBufferObjectManager));
+        stopWatchTextList.add(new Text(200, 300, ResourcesManager.getInstance().getWhiteFontBiggest(), "00", vertexBufferObjectManager));
+        stopWatchTextList.add(new Text(240, 300, ResourcesManager.getInstance().getWhiteFontBiggest(), "00", vertexBufferObjectManager));
 
 
         Color color = optionsService.getClockDialColor();
@@ -308,6 +308,7 @@ public class GameScene extends BaseScene {
 
         for (Text text : stopWatchTextList) {
             text.setColor(color);
+            text.setText("0");
             attachChild(text);
         }
     }
