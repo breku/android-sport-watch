@@ -25,9 +25,7 @@ public class MainMenuScene extends BaseScene implements MenuScene.IOnMenuItemCli
         createBackground();
         createButtons();
 
-
     }
-
 
     private void createBackground() {
         attachChild(new Sprite(ConstantsUtil.SCREEN_WIDTH / 2, ConstantsUtil.SCREEN_HEIGHT / 2, resourcesManager.getMenuBackgroundTextureRegion(), vertexBufferObjectManager));

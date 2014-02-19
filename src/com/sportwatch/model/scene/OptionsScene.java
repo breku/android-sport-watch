@@ -41,8 +41,6 @@ public class OptionsScene extends BaseScene implements MenuScene.IOnMenuItemClic
     public static final int CLOCK_DIAL_NUMER = 100;
 
 
-
-
     @Override
     public void createScene(Object... objects) {
         init();
@@ -71,15 +69,14 @@ public class OptionsScene extends BaseScene implements MenuScene.IOnMenuItemClic
         }
     }
 
-    private void createTextAndRectangleForClockDial(){
+    private void createTextAndRectangleForClockDial() {
         Text text = new Text(150, 400, ResourcesManager.getInstance().getWhiteFont(), "Color of clock dial", vertexBufferObjectManager);
         attachChild(text);
-        createColorRectangleLine(400,CLOCK_DIAL_NUMER);
+        createColorRectangleLine(400, CLOCK_DIAL_NUMER);
 
     }
 
     private void createColorRectangleLine(final int height, final int clockNumber) {
-
 
 
         int positionX = 320;
@@ -89,9 +86,9 @@ public class OptionsScene extends BaseScene implements MenuScene.IOnMenuItemClic
                 public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
                     if (pSceneTouchEvent.isActionUp()) {
 
-                        if(clockNumber == CLOCK_DIAL_NUMER){
+                        if (clockNumber == CLOCK_DIAL_NUMER) {
                             optionsService.setClockDialColor(clockNumber, color.name());
-                        }else {
+                        } else {
                             optionsService.setClockHandColor(clockNumber, color.name());
                         }
 
@@ -104,7 +101,7 @@ public class OptionsScene extends BaseScene implements MenuScene.IOnMenuItemClic
                     return false;
                 }
             };
-            if(optionsService.isClockHandColored(clockNumber,color)){
+            if (optionsService.isClockHandColored(clockNumber, color)) {
                 rectangle.setScale(RECTANGLE_SCALE);
             }
             rectangle.setColor(color.getColor());
@@ -130,7 +127,7 @@ public class OptionsScene extends BaseScene implements MenuScene.IOnMenuItemClic
     /**
      * Creates top numbers
      */
-    private void createTopNumbers(){
+    private void createTopNumbers() {
         menuScene = new MenuScene(camera);
         menuScene.setPosition(0, 0);
 
@@ -161,8 +158,8 @@ public class OptionsScene extends BaseScene implements MenuScene.IOnMenuItemClic
         attachChild(new Sprite(ConstantsUtil.SCREEN_WIDTH / 2, ConstantsUtil.SCREEN_HEIGHT / 2, resourcesManager.getOptionsBackgroundTextureRegion(), vertexBufferObjectManager));
     }
 
-    private void createTopLeftCaption(){
-        Text text = new Text(200,440,ResourcesManager.getInstance().getWhiteFont(),"Number of clock hands",vertexBufferObjectManager);
+    private void createTopLeftCaption() {
+        Text text = new Text(200, 440, ResourcesManager.getInstance().getWhiteFont(), "Number of clock hands", vertexBufferObjectManager);
         attachChild(text);
     }
 

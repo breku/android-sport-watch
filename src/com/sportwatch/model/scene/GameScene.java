@@ -39,6 +39,9 @@ public class GameScene extends BaseScene {
 
     private final static Integer FIRST_HAND_CLOCK_TAG = 25;
 
+    private boolean isClockStarted;
+    private boolean soundEffectPlayed;
+
     /**
      * @param objects objects[0] - levelDifficulty
      *                objects[1] - mathParameter
@@ -118,6 +121,8 @@ public class GameScene extends BaseScene {
     }
 
     private void pauseClocks() {
+        isClockStarted = false;
+        soundEffectPlayed = false;
         unregisterUpdateHandlers(new IUpdateHandlerMatcher() {
             @Override
             public boolean matches(IUpdateHandler pItem) {
@@ -152,7 +157,7 @@ public class GameScene extends BaseScene {
         }
 
 
-        registerUpdateHandler(new TimerHandler(0.5f,new ITimerCallback() {
+        registerUpdateHandler(new TimerHandler(0.5f, new ITimerCallback() {
             @Override
             public void onTimePassed(TimerHandler pTimerHandler) {
 
@@ -166,7 +171,6 @@ public class GameScene extends BaseScene {
                 registerTouchArea(buttonReset);
             }
         }));
-
 
 
         resetStopWatchForPosition(0);
@@ -204,6 +208,7 @@ public class GameScene extends BaseScene {
     }
 
     private void startClocks() {
+        isClockStarted = true;
         registerUpdateHandler(new TimerHandler(0.25f, true, new ITimerCallback() {
             @Override
             public void onTimePassed(TimerHandler pTimerHandler) {
@@ -272,6 +277,8 @@ public class GameScene extends BaseScene {
 
         firstTimeCounter = 0;
         clockHandList = new ArrayList<Sprite>();
+        isClockStarted = false;
+        soundEffectPlayed = false;
 
         numberOfClockHands = optionsService.getNumberOfHandClocks();
 
@@ -333,11 +340,32 @@ public class GameScene extends BaseScene {
     protected void onManagedUpdate(float pSecondsElapsed) {
 
         if (firstTimeCounter++ == 1) {
-            resourcesManager.getStartGameSound().play();
+//            resourcesManager.getStartGameSound().play();
 
         }
 
+        handleSoundEffects();
+
+
         super.onManagedUpdate(pSecondsElapsed);
+    }
+
+    private void handleSoundEffects() {
+        if (!soundEffectPlayed) {
+            for (Sprite clockHand : clockHandList) {
+                if ((int) (clockHand.getRotation() % 360) == 0 && isClockStarted) {
+                    ResourcesManager.getInstance().getWinSound().play();
+                    soundEffectPlayed = true;
+                    registerUpdateHandler(new TimerHandler(5.0f, new ITimerCallback() {
+                        @Override
+                        public void onTimePassed(TimerHandler pTimerHandler) {
+                            soundEffectPlayed = false;
+                        }
+                    }));
+                }
+            }
+        }
+
     }
 
     @Override

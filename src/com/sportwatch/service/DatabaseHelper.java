@@ -104,7 +104,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
         createDefaultNumberOfClockHands(sqLiteDatabase, ConstantsUtil.MAX_NUMBER_OF_CLOCK_HANDS);
-        createDefaulColorOfClockDial(sqLiteDatabase,ClockHandColor.WHITE);
+        createDefaulColorOfClockDial(sqLiteDatabase, ClockHandColor.WHITE);
 
         // Create default colors for each clock hand
         for (int i = 0; i < ConstantsUtil.MAX_NUMBER_OF_CLOCK_HANDS; i++) {

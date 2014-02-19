@@ -38,7 +38,7 @@ public class ResourcesManager {
 
     private BitmapTextureAtlas splashTextureAtlas, menuFontTextureAtlas, gameFontTextureAtlas, whiteFontBigTextureAtlas,
             whiteFontBiggestTextureAtlas, loadingTextureAtlas;
-    private BuildableBitmapTextureAtlas menuTextureAtlas, optionsTextureAtlas,gameBackgroundTextureAtlas, gameTextureAtlas;
+    private BuildableBitmapTextureAtlas menuTextureAtlas, optionsTextureAtlas, gameBackgroundTextureAtlas, gameTextureAtlas;
 
     // Game
     private ITextureRegion backgroundGameTextureRegion, clockDialTextureRegion,
@@ -60,7 +60,6 @@ public class ResourcesManager {
 
 
     private List<Sound> winSoundList;
-    private Sound startGameSound;
     private Font whiteFont, blackFont, whiteFontBig, whiteFontBiggest;
 
     public static void prepareManager(Engine engine, BaseGameActivity activity, Camera camera, VertexBufferObjectManager vertexBufferObjectManager) {
@@ -89,16 +88,13 @@ public class ResourcesManager {
     }
 
 
-
     private void loadGameMusic() {
 
         SoundFactory.setAssetBasePath("mfx/other/");
         winSoundList = new ArrayList<Sound>();
 
         try {
-            winSoundList.add(SoundFactory.createSoundFromAsset(getEngine().getSoundManager(), activity, "win.ogg"));
-
-            startGameSound = SoundFactory.createSoundFromAsset(getEngine().getSoundManager(), activity, "go.ogg");
+            winSoundList.add(SoundFactory.createSoundFromAsset(getEngine().getSoundManager(), activity, "bell.ogg"));
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -140,7 +136,7 @@ public class ResourcesManager {
         }
         clockDialTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "clockDial.png");
         buttonResetTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "reset.png");
-        buttonStartTextureRegion= BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "start.png");
+        buttonStartTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "start.png");
         buttonPauseTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "pause.png");
 
 
@@ -326,10 +322,6 @@ public class ResourcesManager {
 
     public ITextureRegion getBackgroundGameTextureRegion() {
         return backgroundGameTextureRegion;
-    }
-
-    public Sound getStartGameSound() {
-        return startGameSound;
     }
 
     public ITextureRegion getLoadingTextureRegion() {

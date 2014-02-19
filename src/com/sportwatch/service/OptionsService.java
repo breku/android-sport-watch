@@ -30,7 +30,7 @@ public class OptionsService extends BaseService {
     }
 
     public boolean isClockHandColored(int clockNumber, ClockHandColor color) {
-        return databaseHelper.isClockHandColored(clockNumber,color);
+        return databaseHelper.isClockHandColored(clockNumber, color);
     }
 
     public void setClockDialColor(int clockNumber, String name) {
