@@ -1,15 +1,13 @@
 package com.sportwatch.model.scene;
 
+import android.widget.Toast;
 import com.sportwatch.manager.ResourcesManager;
 import com.sportwatch.manager.SceneManager;
-import com.sportwatch.matcher.ClassIEntityMatcher;
 import com.sportwatch.service.OptionsService;
 import com.sportwatch.util.ClockHandColor;
+import com.sportwatch.util.ClockHandText;
 import com.sportwatch.util.ConstantsUtil;
 import com.sportwatch.util.SceneType;
-import org.andengine.entity.IEntity;
-import org.andengine.entity.modifier.ScaleModifier;
-import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.scene.menu.MenuScene;
 import org.andengine.entity.scene.menu.item.IMenuItem;
 import org.andengine.entity.scene.menu.item.TextMenuItem;
@@ -17,7 +15,6 @@ import org.andengine.entity.scene.menu.item.decorator.ScaleMenuItemDecorator;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
 import org.andengine.input.touch.TouchEvent;
-import org.andengine.util.debug.Debug;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,102 +29,123 @@ public class OptionsScene extends BaseScene implements MenuScene.IOnMenuItemClic
 
     private Integer numberOfHandClocks;
     private OptionsService optionsService;
-    private boolean removeTexts;
-
-    private final int RECTANGLE_SIZE = 30;
-    private final float RECTANGLE_SCALE = 1.5f;
-    private final float RECTANGLE_SCALE_TIME = 0.25f;
 
     public static final int CLOCK_DIAL_NUMER = 100;
+
+
+    // Enums
+    private ClockHandText currentClockHandText;
+    private ClockHandColor currentClockHandColor;
+
+    // Sprites
+    private Text clockHandText;
+    private Sprite colorRectangle;
 
 
     @Override
     public void createScene(Object... objects) {
         init();
         createBackground();
-        createTopLeftCaption();
-        createTopNumbers();
-        createTextsAndColorRectangles();
-        createTextAndRectangleForClockDial();
+        createTopNumbersAndCaption();
+        createArrows();
+        initTextAndRectangle();
+    }
+
+    private void initTextAndRectangle() {
+        clockHandText = new Text(300,280,ResourcesManager.getInstance().getWhiteFont(),"Clock hand 1 color:        ",vertexBufferObjectManager);
+        clockHandText.setText(currentClockHandText.getText());
+        colorRectangle = new Sprite(600,280,ResourcesManager.getInstance().getColorRectangleTextureRegion(),vertexBufferObjectManager);
+        colorRectangle.setColor(optionsService.getColorForClockHand(currentClockHandText.getNumber()));
+        attachChild(clockHandText);
+        attachChild(colorRectangle);
+    }
+
+    private void createArrows() {
+        // Arrows of text
+        Sprite arrowUpLeft = new Sprite(300,350,ResourcesManager.getInstance().getArrowUpTextureRegion(),vertexBufferObjectManager){
+            @Override
+            public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
+                if(pSceneTouchEvent.isActionUp()){
+                    currentClockHandText = currentClockHandText.previous();
+
+                    colorRectangle.setColor(optionsService.getColorForClockHand(currentClockHandText.getNumber()));
+                    clockHandText.setText(currentClockHandText.getText());
+                    return true;
+                }
+                return false;
+            }
+        };
+
+        // Arrows of color
+        Sprite arrowUpRight = new Sprite(600,350,ResourcesManager.getInstance().getArrowUpTextureRegion(),vertexBufferObjectManager){
+            @Override
+            public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
+                if(pSceneTouchEvent.isActionUp()){
+                    currentClockHandColor = currentClockHandColor.previous();
+                    colorRectangle.setColor(currentClockHandColor.getColor());
+                    optionsService.setClockDialColor(currentClockHandText.getNumber(),currentClockHandColor.name());
+                    return true;
+                }
+                return false;
+            }
+        };
+
+        // Arrows of text
+        Sprite arrowDownLeft = new Sprite(300,200,ResourcesManager.getInstance().getArrowDownTextureRegion(),vertexBufferObjectManager){
+            @Override
+            public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
+                if(pSceneTouchEvent.isActionUp()){
+                    currentClockHandText = currentClockHandText.next();
+
+                    colorRectangle.setColor(optionsService.getColorForClockHand(currentClockHandText.getNumber()));
+                    clockHandText.setText(currentClockHandText.getText());
+                    return true;
+                }
+                return false;
+            }
+        };
+
+        // Arrows of color
+        Sprite arrowDownRight = new Sprite(600,200,ResourcesManager.getInstance().getArrowDownTextureRegion(),vertexBufferObjectManager){
+            @Override
+            public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
+                if(pSceneTouchEvent.isActionUp()){
+                    currentClockHandColor = currentClockHandColor.next();
+                    colorRectangle.setColor(currentClockHandColor.getColor());
+                    optionsService.setClockDialColor(currentClockHandText.getNumber(),currentClockHandColor.name());
+                    return true;
+                }
+                return false;
+            }
+        };
+
+        registerTouchArea(arrowDownLeft);
+        registerTouchArea(arrowDownRight);
+        registerTouchArea(arrowUpLeft);
+        registerTouchArea(arrowUpRight);
+
+        attachChild(arrowDownLeft);
+        attachChild(arrowDownRight);
+        attachChild(arrowUpLeft);
+        attachChild(arrowUpRight);
     }
 
     private void init() {
         optionsService = new OptionsService();
         numberOfHandClocks = optionsService.getNumberOfHandClocks();
-    }
-
-
-    /**
-     * Creates middle captions + rectangles
-     */
-    private void createTextsAndColorRectangles() {
-        for (int i = 0; i < numberOfHandClocks; i++) {
-            int height = 400 - 60 * (i + 1);
-            Text text = new Text(150, height, ResourcesManager.getInstance().getWhiteFont(), "Clock hand " + (i + 1) + " color", vertexBufferObjectManager);
-            createColorRectangleLine(height, i);
-            attachChild(text);
-        }
-    }
-
-    private void createTextAndRectangleForClockDial() {
-        Text text = new Text(150, 400, ResourcesManager.getInstance().getWhiteFont(), "Color of clock dial", vertexBufferObjectManager);
-        attachChild(text);
-        createColorRectangleLine(400, CLOCK_DIAL_NUMER);
+        currentClockHandText = ClockHandText.A;
+        currentClockHandColor = ClockHandColor.WHITE;
 
     }
 
-    private void createColorRectangleLine(final int height, final int clockNumber) {
-
-
-        int positionX = 320;
-        for (final ClockHandColor color : ClockHandColor.values()) {
-            Rectangle rectangle = new Rectangle(positionX, height, RECTANGLE_SIZE, RECTANGLE_SIZE, vertexBufferObjectManager) {
-                @Override
-                public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
-                    if (pSceneTouchEvent.isActionUp()) {
-
-                        if (clockNumber == CLOCK_DIAL_NUMER) {
-                            optionsService.setClockDialColor(clockNumber, color.name());
-                        } else {
-                            optionsService.setClockHandColor(clockNumber, color.name());
-                        }
-
-
-                        resetPreviousRectangle(height);
-                        registerEntityModifier(new ScaleModifier(RECTANGLE_SCALE_TIME, 1.0f, RECTANGLE_SCALE));
-
-                        return true;
-                    }
-                    return false;
-                }
-            };
-            if (optionsService.isClockHandColored(clockNumber, color)) {
-                rectangle.setScale(RECTANGLE_SCALE);
-            }
-            rectangle.setColor(color.getColor());
-            positionX += 60;
-            registerTouchArea(rectangle);
-            attachChild(rectangle);
-        }
-
-    }
-
-    private void resetPreviousRectangle(int height) {
-        for (IEntity entity : mChildren) {
-            Debug.e(String.valueOf(entity.getWidth()));
-            if (entity instanceof Rectangle && entity.getY() == height) {
-                if (entity.getScaleX() == RECTANGLE_SCALE) {
-                    entity.registerEntityModifier(new ScaleModifier(RECTANGLE_SCALE_TIME, RECTANGLE_SCALE, 1.0f));
-                }
-            }
-
-        }
-    }
 
     /**
      * Creates top numbers
      */
-    private void createTopNumbers() {
+    private void createTopNumbersAndCaption() {
+        Text text = new Text(400, 440, ResourcesManager.getInstance().getWhiteFont(), "Number of clock hands", vertexBufferObjectManager);
+        attachChild(text);
+
         menuScene = new MenuScene(camera);
         menuScene.setPosition(0, 0);
 
@@ -146,7 +164,7 @@ public class OptionsScene extends BaseScene implements MenuScene.IOnMenuItemClic
         menuScene.setBackgroundEnabled(false);
 
         for (int i = 0; i < menuItemList.size(); i++) {
-            menuItemList.get(i).setPosition(300 + 80 * (i + 1), 440);
+            menuItemList.get(i).setPosition(100 + 80 * (i + 1), 400);
         }
 
         menuScene.setOnMenuItemClickListener(this);
@@ -158,10 +176,6 @@ public class OptionsScene extends BaseScene implements MenuScene.IOnMenuItemClic
         attachChild(new Sprite(ConstantsUtil.SCREEN_WIDTH / 2, ConstantsUtil.SCREEN_HEIGHT / 2, resourcesManager.getOptionsBackgroundTextureRegion(), vertexBufferObjectManager));
     }
 
-    private void createTopLeftCaption() {
-        Text text = new Text(200, 440, ResourcesManager.getInstance().getWhiteFont(), "Number of clock hands", vertexBufferObjectManager);
-        attachChild(text);
-    }
 
 
     @Override
@@ -169,42 +183,8 @@ public class OptionsScene extends BaseScene implements MenuScene.IOnMenuItemClic
         super.onManagedUpdate(pSecondsElapsed);
 
 
-        if (removeTexts) {
-            removeTexts();
-            removeColorRectangles();
-            clearTouchAreas();
-            createTextAndRectangleForClockDial();
-            createTextsAndColorRectangles();
-            createTopLeftCaption();
-
-        }
     }
 
-    /**
-     * Removes:
-     * topLeftText next to Numbers
-     * middleTexts next to rectangles, the first for dial included
-     */
-    private void removeTexts() {
-        removeTexts = false;
-        IEntity entity;
-        do {
-            entity = getChildByMatcher(new ClassIEntityMatcher(Text.class));
-            if (entity != null) {
-                entity.detachSelf();
-            }
-        } while (entity != null);
-    }
-
-    private void removeColorRectangles() {
-        IEntity entity;
-        do {
-            entity = getChildByMatcher(new ClassIEntityMatcher(Rectangle.class));
-            if (entity != null) {
-                entity.detachSelf();
-            }
-        } while (entity != null);
-    }
 
     @Override
     public void onBackKeyPressed() {
@@ -225,12 +205,21 @@ public class OptionsScene extends BaseScene implements MenuScene.IOnMenuItemClic
     @Override
     public boolean onMenuItemClicked(MenuScene pMenuScene, IMenuItem pMenuItem, float pMenuItemLocalX, float pMenuItemLocalY) {
         updateNumberOfHandClocks(pMenuItem.getID());
+        showToastNumberOfClockHandsSaved();
         return true;
+    }
+
+    private void showToastNumberOfClockHandsSaved(){
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(activity, "Number of clock hands saved", 2).show();
+            }
+        });
     }
 
     private void updateNumberOfHandClocks(int handClockNumber) {
         optionsService.updateNumberOfHandClocks(handClockNumber + 1);
         numberOfHandClocks = optionsService.getNumberOfHandClocks();
-        removeTexts = true;
     }
 }

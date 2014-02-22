@@ -202,7 +202,7 @@ public class GameScene extends BaseScene {
 
     private void createClockDial() {
         Sprite sprite = new Sprite(515, 255, ResourcesManager.getInstance().getClockDialTextureRegion(), vertexBufferObjectManager);
-        Color color = optionsService.getClockDialColor();
+        Color color = optionsService.getColorForClockHand(OptionsScene.CLOCK_DIAL_NUMER);
         sprite.setColor(color);
         attachChild(sprite);
     }
@@ -299,7 +299,7 @@ public class GameScene extends BaseScene {
         stopWatchTextList.add(new Text(240, 300, ResourcesManager.getInstance().getWhiteFontBiggest(), "00", vertexBufferObjectManager));
 
 
-        Color color = optionsService.getClockDialColor();
+        Color color = optionsService.getColorForClockHand(OptionsScene.CLOCK_DIAL_NUMER);
 
         Text colon = new Text(160, 300, ResourcesManager.getInstance().getWhiteFontBiggest(), ":", vertexBufferObjectManager);
         colon.setColor(color);

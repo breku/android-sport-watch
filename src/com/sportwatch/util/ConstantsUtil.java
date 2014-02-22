@@ -12,7 +12,7 @@ public class ConstantsUtil implements Constants, LevelConstants {
     public static final int SCREEN_WIDTH = 800;
     public static final int SCREEN_HEIGHT = 480;
 
-    public static final float LOADING_SCENE_TIME = 0.02f;
+    public static final float LOADING_SCENE_TIME = 0.1f;
     public static final float SPLASH_SCREEN_TIME = 0.1f;
 
     public static final int MAX_NUMBER_OF_CLOCK_HANDS = 6;

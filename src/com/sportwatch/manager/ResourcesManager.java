@@ -53,7 +53,8 @@ public class ResourcesManager {
     private ITextureRegion buttonNewGameTextureRegion, buttonOptionsTextureRegion, menuBackgroundTextureRegion;
 
     // Options
-    private ITextureRegion optionsBackgroundTextureRegion, optionsTextureRegion;
+    private ITextureRegion optionsBackgroundTextureRegion, optionsTextureRegion, arrowUpTextureRegion, arrowDownTextureRegion,
+            colorRectangleTextureRegion;
 
     //Loading
     private ITextureRegion loadingTextureRegion;
@@ -109,6 +110,9 @@ public class ResourcesManager {
 
         optionsBackgroundTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(optionsTextureAtlas, activity, "background.png");
         optionsTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(optionsTextureAtlas, activity, "options.png");
+        arrowUpTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(optionsTextureAtlas, activity, "arrowUp.png");
+        arrowDownTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(optionsTextureAtlas, activity, "arrowDown.png");
+        colorRectangleTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(optionsTextureAtlas, activity, "colorRectangle.png");
 
         try {
             optionsTextureAtlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(0, 0, 1));
@@ -354,5 +358,17 @@ public class ResourcesManager {
 
     public ITextureRegion getButtonResetTextureRegion() {
         return buttonResetTextureRegion;
+    }
+
+    public ITextureRegion getArrowUpTextureRegion() {
+        return arrowUpTextureRegion;
+    }
+
+    public ITextureRegion getArrowDownTextureRegion() {
+        return arrowDownTextureRegion;
+    }
+
+    public ITextureRegion getColorRectangleTextureRegion() {
+        return colorRectangleTextureRegion;
     }
 }

@@ -1,6 +1,5 @@
 package com.sportwatch.service;
 
-import com.sportwatch.model.scene.OptionsScene;
 import com.sportwatch.util.ClockHandColor;
 import org.andengine.util.adt.color.Color;
 
@@ -35,9 +34,5 @@ public class OptionsService extends BaseService {
 
     public void setClockDialColor(int clockNumber, String name) {
         databaseHelper.setClockHandColor(clockNumber, name);
-    }
-
-    public Color getClockDialColor() {
-        return databaseHelper.getColorForClockHand(OptionsScene.CLOCK_DIAL_NUMER);
     }
 }
