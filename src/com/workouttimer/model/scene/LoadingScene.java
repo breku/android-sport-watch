@@ -1,8 +1,8 @@
-package com.sportwatch.model.scene;
+package com.workouttimer.model.scene;
 
-import com.sportwatch.manager.ResourcesManager;
-import com.sportwatch.util.ConstantsUtil;
-import com.sportwatch.util.SceneType;
+import com.workouttimer.manager.ResourcesManager;
+import com.workouttimer.util.ConstantsUtil;
+import com.workouttimer.util.SceneType;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
 

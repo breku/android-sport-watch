@@ -1,11 +1,11 @@
-package com.sportwatch.model.scene;
+package com.workouttimer.model.scene;
 
-import com.sportwatch.manager.ResourcesManager;
-import com.sportwatch.manager.SceneManager;
-import com.sportwatch.matcher.ClassTouchAreaMacher;
-import com.sportwatch.service.OptionsService;
-import com.sportwatch.util.ConstantsUtil;
-import com.sportwatch.util.SceneType;
+import com.workouttimer.manager.ResourcesManager;
+import com.workouttimer.manager.SceneManager;
+import com.workouttimer.matcher.ClassTouchAreaMacher;
+import com.workouttimer.service.OptionsService;
+import com.workouttimer.util.ConstantsUtil;
+import com.workouttimer.util.SceneType;
 import org.andengine.engine.camera.hud.HUD;
 import org.andengine.engine.handler.IUpdateHandler;
 import org.andengine.engine.handler.timer.ITimerCallback;

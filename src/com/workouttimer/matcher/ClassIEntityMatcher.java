@@ -1,4 +1,4 @@
-package com.sportwatch.matcher;
+package com.workouttimer.matcher;
 
 import org.andengine.entity.IEntity;
 import org.andengine.entity.IEntityMatcher;

@@ -1,7 +1,7 @@
-package com.sportwatch.manager;
+package com.workouttimer.manager;
 
 import android.graphics.Color;
-import com.sportwatch.util.ConstantsUtil;
+import com.workouttimer.util.ConstantsUtil;
 import org.andengine.audio.sound.Sound;
 import org.andengine.audio.sound.SoundFactory;
 import org.andengine.engine.Engine;

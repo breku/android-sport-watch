@@ -1,13 +1,13 @@
-package com.sportwatch.service;
+package com.workouttimer.service;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import com.sportwatch.model.scene.OptionsScene;
-import com.sportwatch.util.ClockHandColor;
-import com.sportwatch.util.ConstantsUtil;
+import com.workouttimer.model.scene.OptionsScene;
+import com.workouttimer.util.ClockHandColor;
+import com.workouttimer.util.ConstantsUtil;
 import org.andengine.util.adt.color.Color;
 import org.andengine.util.debug.Debug;
 

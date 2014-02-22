@@ -1,7 +1,7 @@
-package com.sportwatch.service;
+package com.workouttimer.service;
 
 import android.app.Activity;
-import com.sportwatch.manager.ResourcesManager;
+import com.workouttimer.manager.ResourcesManager;
 import org.andengine.engine.Engine;
 
 /**

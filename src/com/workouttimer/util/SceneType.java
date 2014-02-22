@@ -1,4 +1,4 @@
-package com.sportwatch.util;
+package com.workouttimer.util;
 
 /**
  * User: Breku

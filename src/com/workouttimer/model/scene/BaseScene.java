@@ -1,8 +1,8 @@
-package com.sportwatch.model.scene;
+package com.workouttimer.model.scene;
 
 import android.app.Activity;
-import com.sportwatch.manager.ResourcesManager;
-import com.sportwatch.util.SceneType;
+import com.workouttimer.manager.ResourcesManager;
+import com.workouttimer.util.SceneType;
 import org.andengine.engine.Engine;
 import org.andengine.engine.camera.Camera;
 import org.andengine.entity.scene.Scene;

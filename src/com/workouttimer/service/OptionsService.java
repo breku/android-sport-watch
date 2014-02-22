@@ -1,6 +1,6 @@
-package com.sportwatch.service;
+package com.workouttimer.service;
 
-import com.sportwatch.util.ClockHandColor;
+import com.workouttimer.util.ClockHandColor;
 import org.andengine.util.adt.color.Color;
 
 /**

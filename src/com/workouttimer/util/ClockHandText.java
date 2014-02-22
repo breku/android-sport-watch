@@ -1,6 +1,6 @@
-package com.sportwatch.util;
+package com.workouttimer.util;
 
-import com.sportwatch.model.scene.OptionsScene;
+import com.workouttimer.model.scene.OptionsScene;
 
 /**
  * User: Breku

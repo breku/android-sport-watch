@@ -1,13 +1,13 @@
-package com.sportwatch.model.scene;
+package com.workouttimer.model.scene;
 
 import android.widget.Toast;
-import com.sportwatch.manager.ResourcesManager;
-import com.sportwatch.manager.SceneManager;
-import com.sportwatch.service.OptionsService;
-import com.sportwatch.util.ClockHandColor;
-import com.sportwatch.util.ClockHandText;
-import com.sportwatch.util.ConstantsUtil;
-import com.sportwatch.util.SceneType;
+import com.workouttimer.manager.ResourcesManager;
+import com.workouttimer.manager.SceneManager;
+import com.workouttimer.service.OptionsService;
+import com.workouttimer.util.ClockHandColor;
+import com.workouttimer.util.ClockHandText;
+import com.workouttimer.util.ConstantsUtil;
+import com.workouttimer.util.SceneType;
 import org.andengine.entity.scene.menu.MenuScene;
 import org.andengine.entity.scene.menu.item.IMenuItem;
 import org.andengine.entity.scene.menu.item.TextMenuItem;

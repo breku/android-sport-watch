@@ -1,4 +1,4 @@
-package com.sportwatch.util;
+package com.workouttimer.util;
 
 import org.andengine.util.adt.color.Color;
 

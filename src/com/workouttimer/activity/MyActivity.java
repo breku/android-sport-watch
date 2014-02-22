@@ -1,4 +1,4 @@
-package com.sportwatch.activity;
+package com.workouttimer.activity;
 
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -6,9 +6,9 @@ import android.widget.FrameLayout;
 import com.google.ads.AdRequest;
 import com.google.ads.AdSize;
 import com.google.ads.AdView;
-import com.sportwatch.manager.ResourcesManager;
-import com.sportwatch.manager.SceneManager;
-import com.sportwatch.util.ConstantsUtil;
+import com.workouttimer.manager.ResourcesManager;
+import com.workouttimer.manager.SceneManager;
+import com.workouttimer.util.ConstantsUtil;
 import org.andengine.engine.camera.Camera;
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;

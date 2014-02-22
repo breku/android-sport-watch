@@ -1,6 +1,6 @@
-package com.sportwatch.model.scene;
+package com.workouttimer.model.scene;
 
-import com.sportwatch.util.SceneType;
+import com.workouttimer.util.SceneType;
 import org.andengine.engine.camera.Camera;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.opengl.util.GLState;

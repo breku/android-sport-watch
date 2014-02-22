@@ -1,10 +1,10 @@
-package com.sportwatch.manager;
+package com.workouttimer.manager;
 
 import com.google.ads.AdView;
-import com.sportwatch.activity.MyActivity;
-import com.sportwatch.model.scene.*;
-import com.sportwatch.util.ConstantsUtil;
-import com.sportwatch.util.SceneType;
+import com.workouttimer.activity.MyActivity;
+import com.workouttimer.model.scene.*;
+import com.workouttimer.util.ConstantsUtil;
+import com.workouttimer.util.SceneType;
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.ui.IGameInterface;
