@@ -6,7 +6,7 @@ import org.andengine.util.adt.color.Color;
  * User: Breku
  * Date: 10.02.14
  */
-public enum ClockHandColor  {
+public enum ClockHandColor {
     GREEN(Color.GREEN),
     RED(Color.RED),
     BLUE(Color.BLUE),
@@ -25,15 +25,15 @@ public enum ClockHandColor  {
         return color;
     }
 
-    public ClockHandColor next(){
-        return values()[(ordinal()+1)%values().length];
+    public ClockHandColor next() {
+        return values()[(ordinal() + 1) % values().length];
     }
 
-    public ClockHandColor previous(){
-        if(this == values()[0]){
-            return values()[values().length-1];
-        }else {
-            return values()[(ordinal()-1)%values().length];
+    public ClockHandColor previous() {
+        if (this == values()[0]) {
+            return values()[values().length - 1];
+        } else {
+            return values()[(ordinal() - 1) % values().length];
         }
     }
 }

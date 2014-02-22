@@ -52,9 +52,9 @@ public class OptionsScene extends BaseScene implements MenuScene.IOnMenuItemClic
     }
 
     private void initTextAndRectangle() {
-        clockHandText = new Text(300,280,ResourcesManager.getInstance().getWhiteFont(),"Clock hand 1 color:        ",vertexBufferObjectManager);
+        clockHandText = new Text(300, 280, ResourcesManager.getInstance().getWhiteFont(), "Clock hand 1 color:        ", vertexBufferObjectManager);
         clockHandText.setText(currentClockHandText.getText());
-        colorRectangle = new Sprite(600,280,ResourcesManager.getInstance().getColorRectangleTextureRegion(),vertexBufferObjectManager);
+        colorRectangle = new Sprite(600, 280, ResourcesManager.getInstance().getColorRectangleTextureRegion(), vertexBufferObjectManager);
         colorRectangle.setColor(optionsService.getColorForClockHand(currentClockHandText.getNumber()));
         attachChild(clockHandText);
         attachChild(colorRectangle);
@@ -62,10 +62,10 @@ public class OptionsScene extends BaseScene implements MenuScene.IOnMenuItemClic
 
     private void createArrows() {
         // Arrows of text
-        Sprite arrowUpLeft = new Sprite(300,350,ResourcesManager.getInstance().getArrowUpTextureRegion(),vertexBufferObjectManager){
+        Sprite arrowUpLeft = new Sprite(300, 350, ResourcesManager.getInstance().getArrowUpTextureRegion(), vertexBufferObjectManager) {
             @Override
             public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
-                if(pSceneTouchEvent.isActionUp()){
+                if (pSceneTouchEvent.isActionUp()) {
                     currentClockHandText = currentClockHandText.previous();
 
                     colorRectangle.setColor(optionsService.getColorForClockHand(currentClockHandText.getNumber()));
@@ -77,13 +77,13 @@ public class OptionsScene extends BaseScene implements MenuScene.IOnMenuItemClic
         };
 
         // Arrows of color
-        Sprite arrowUpRight = new Sprite(600,350,ResourcesManager.getInstance().getArrowUpTextureRegion(),vertexBufferObjectManager){
+        Sprite arrowUpRight = new Sprite(600, 350, ResourcesManager.getInstance().getArrowUpTextureRegion(), vertexBufferObjectManager) {
             @Override
             public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
-                if(pSceneTouchEvent.isActionUp()){
+                if (pSceneTouchEvent.isActionUp()) {
                     currentClockHandColor = currentClockHandColor.previous();
                     colorRectangle.setColor(currentClockHandColor.getColor());
-                    optionsService.setClockDialColor(currentClockHandText.getNumber(),currentClockHandColor.name());
+                    optionsService.setClockDialColor(currentClockHandText.getNumber(), currentClockHandColor.name());
                     return true;
                 }
                 return false;
@@ -91,10 +91,10 @@ public class OptionsScene extends BaseScene implements MenuScene.IOnMenuItemClic
         };
 
         // Arrows of text
-        Sprite arrowDownLeft = new Sprite(300,200,ResourcesManager.getInstance().getArrowDownTextureRegion(),vertexBufferObjectManager){
+        Sprite arrowDownLeft = new Sprite(300, 200, ResourcesManager.getInstance().getArrowDownTextureRegion(), vertexBufferObjectManager) {
             @Override
             public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
-                if(pSceneTouchEvent.isActionUp()){
+                if (pSceneTouchEvent.isActionUp()) {
                     currentClockHandText = currentClockHandText.next();
 
                     colorRectangle.setColor(optionsService.getColorForClockHand(currentClockHandText.getNumber()));
@@ -106,13 +106,13 @@ public class OptionsScene extends BaseScene implements MenuScene.IOnMenuItemClic
         };
 
         // Arrows of color
-        Sprite arrowDownRight = new Sprite(600,200,ResourcesManager.getInstance().getArrowDownTextureRegion(),vertexBufferObjectManager){
+        Sprite arrowDownRight = new Sprite(600, 200, ResourcesManager.getInstance().getArrowDownTextureRegion(), vertexBufferObjectManager) {
             @Override
             public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
-                if(pSceneTouchEvent.isActionUp()){
+                if (pSceneTouchEvent.isActionUp()) {
                     currentClockHandColor = currentClockHandColor.next();
                     colorRectangle.setColor(currentClockHandColor.getColor());
-                    optionsService.setClockDialColor(currentClockHandText.getNumber(),currentClockHandColor.name());
+                    optionsService.setClockDialColor(currentClockHandText.getNumber(), currentClockHandColor.name());
                     return true;
                 }
                 return false;
@@ -177,7 +177,6 @@ public class OptionsScene extends BaseScene implements MenuScene.IOnMenuItemClic
     }
 
 
-
     @Override
     protected void onManagedUpdate(float pSecondsElapsed) {
         super.onManagedUpdate(pSecondsElapsed);
@@ -209,7 +208,7 @@ public class OptionsScene extends BaseScene implements MenuScene.IOnMenuItemClic
         return true;
     }
 
-    private void showToastNumberOfClockHandsSaved(){
+    private void showToastNumberOfClockHandsSaved() {
         activity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
